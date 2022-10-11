@@ -1,0 +1,11 @@
+push 1
+4:
+add
+add
+mul
+out
+push 1
+add
+jmp :4
+out
+hlt
