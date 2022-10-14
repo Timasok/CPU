@@ -8,6 +8,9 @@
 
 #include "../include/funcs_ASM.h"
 
+//todo add call/ ret(от return) use another stack for that
+//todo delete comments in textCtor
+
 #define ASSERT_OK(textPtr)                                              \
    do{                                                                  \
       if (returnTextError(textPtr) != 0)                                \
@@ -21,7 +24,7 @@
                                                 __LINE__, __FILE__, __FUNCTION__)
 
 #define DEF_CMD(name, num, arg)                                                 \
-        if (strIcmp(cmd, #name) == 0)                                               \
+        if (strIcmp(cmd, #name) == 0)                                           \
     {                                                                           \        
                                                                                 \
     output->number_of_comands++;                                                \
@@ -32,16 +35,38 @@
         getArgs(output, input->lines[line]+ shift);                             \
         fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n",                        \
         output->ip - 1, num, output->code[output->ip - 2], input->lines[line]); \
-                                                                                \
+        dumpCmd(line, cmd, 1, arg);                                             \
+                                                                                \                                                                                
     }else{                                                                      \
                                                                                 \
         fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip,                \
-         output->code[output->ip -1], input->lines[line]);                      \
+        output->code[output->ip -1], input->lines[line]);                       \
+        dumpCmd(line, cmd, 0, arg);                                             \
+                                                                                \
     }                                                                           \
                                                                                 \
-    dumpCmd(line, cmd, 0, arg);                                                 \ 
     }else
 
+#define GET_REG                                                                 \
+    do {                                                                        \
+        if (strIcmp(reg_var, "rax") == 0)                                       \
+        {                                                                       \
+            argument = 1;                                                       \
+                                                                                \
+        }else if(strIcmp(reg_var, "rbx") == 0)                                  \
+        {                                                                       \
+            argument = 2;                                                       \
+                                                                                \
+        }else if(strIcmp(reg_var, "rcx") == 0)                                  \
+        {                                                                       \
+            argument = 3;                                                       \
+                                                                                \
+        }else if(strIcmp(reg_var, "rdx") == 0)                                  \
+        {                                                                       \
+            argument = 4;                                                       \
+                                                                                \
+        }                                                                       \
+    } while(0)
 
 static const char* TXT_BORDER = "************************************************************";
 
@@ -145,9 +170,11 @@ int strIcmp(char *s, char *t)
     for(; tolower(*s) == tolower(*t); ++s, ++t)
     {
         if (*s == '\0')
-        {
             return 0;
-        }
+                
+        if(*s == '_')
+            break;
+
     }
 
     return s - t;
@@ -173,6 +200,20 @@ int strChr(char *cs, char c)
 
 }
 
+int pushDmp(const char* reg_var, int argument)
+{
+    if (argument != 0 || reg_var[0] != ' ')
+    {
+        fprintf(stderr, "%d\n", argument);
+
+    }else{
+
+        fprintf(stderr, "INVALID_ARGUMENT");
+
+    }
+
+
+}
 
 static int getFromLabels(Asm_info *output, int label_idx, int *argument)
 {
@@ -217,16 +258,83 @@ static int writeLabelInFile(int number_of_line, char * cmd, Text_info *input, As
 int getArgs(Asm_info *output, const char * arg_beginning)
 {
 
+    char reg_var[228] = " ";
     int argument = 0;
-    
+    char test_for_ram = 0;
+    int shift;
+
     switch(output->code[output->ip - 1])
     {
         case CMD_PUSH:
-                sscanf(arg_beginning, "%d", &argument);            
-                output->code[output->ip++] = argument;
-                break;
+
+            if (sscanf(arg_beginning, "%c%n", &test_for_ram, &shift) == 2)
+            {
+                if (test_for_ram == '[' /*&& strchr(arg_beginning, ']') != nullptr*/)
+                {
+
+                    if (sscanf(arg_beginning + shift, " %d", &argument) == 1)
+                    {
+                        fprintf(stderr, "[immed]\n");
+                        pushDmp(reg_var, argument);
+                        output->code[output->ip - 1] = CMD_PUSH_MEM_IMMED;
+                        output->code[output->ip++] = argument;
+                        break;
+
+                    }else if (sscanf(arg_beginning + shift, "%s", &reg_var) == 1)
+                    {
+                        
+                        reg_var[3] = '\0';
+                        fprintf(stderr, "%s\n", reg_var);
+
+                        GET_REG;
+                        pushDmp(reg_var, argument);
+
+                        output->code[output->ip - 1] = CMD_PUSH_MEM_REG;
+                        output->code[output->ip++] = argument;
+                        break;
+
+                    }
+
+                }   
+                
+            }else{              
+                
+                if (sscanf(arg_beginning, "%d", &argument) == 1)
+                {
+                    pushDmp(reg_var, argument);
+                    output->code[output->ip - 1] = CMD_PUSH_IMMED;
+                    output->code[output->ip++] = argument;
+                    break;
+
+                }else {
+
+                    sscanf(arg_beginning + shift, "%s", &reg_var);
+                    
+                    reg_var[3] = '\0';
+                    fprintf(stderr, "%s\n", reg_var);
+
+                    GET_REG;
+                    pushDmp(reg_var, argument);
+
+                    output->code[output->ip - 1] = CMD_PUSH_REG;
+                    output->code[output->ip++] = argument;
+                    break;
+
+                }
+
+            }
+
+            fprintf(stderr, "GET HIGH");
+            break;        
 
         case CMD_JMP:
+        case CMD_JB:
+        case CMD_JBE:
+        case CMD_JA:
+        case CMD_JAE:
+        case CMD_JE:
+        case CMD_JNE:
+
                 if (sscanf(arg_beginning, " :%d", &argument) == 1)
                 {   
                     output->DNNTMSP *= 0;
@@ -268,83 +376,24 @@ int compile(Text_info *input, Asm_info *output)
 
         for (int line = 0; line < input->number_of_lines; line++)
         {           
-
+            
             sscanf(input->lines[line], "%s%n", cmd, &shift);
             int len = strlen(cmd);
-// //assert for cmd syntax 
+            //assert for cmd syntax 
 
-            if (strIcmp(cmd, "push") == 0)
-            {
-                
-                output->number_of_comands++;                
-                output->code[output->ip++] = CMD_PUSH;
+            #include "../../inc/comands.h"
 
-                getArgs(output, input->lines[line]+ shift);
-
-                dumpCmd(line, cmd, output->code[output->ip - 2], 1);
-                fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip, CMD_PUSH, output->code[output->ip - 2], input->lines[line]);
-                                
-
-            }else if (strIcmp(cmd, "jmp") == 0)
-            {
-                
-                output->number_of_comands++;
-                output->code[output->ip++] = CMD_JMP;
-
-                getArgs(output, input->lines[line]+ shift);
-
-                dumpCmd(line, cmd, output->code[output->ip - 2], 1);
-                fprintf(asm_listing, "%04x\t%02x\t  %2d\t%s\n", output->ip-1, CMD_JMP, output->code[output->ip - 2], input->lines[line]);
-                
-
-            }else if (strIcmp(cmd, "add") == 0)
-            {
-
-                output->number_of_comands++;
-                output->code[output->ip++] = CMD_ADD;
-                
-                dumpCmd(line, cmd, 0, 0);
-                fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]);
-
-            // }else if (strIcmp(cmd, "sub") == 0){
-            
-            //     writeNonArgCmdInFile(line, cmd, argument, hasArg, input, output, asm_listing, CMD_SUB);
-            //     continue;
-
-            // }else if (strIcmp(cmd, "mul") == 0){
-
-            //     writeNonArgCmdInFile(line, cmd, argument, hasArg, input, output, asm_listing, CMD_MUL);
-            //     continue;
-
-            // }else if (strIcmp(cmd, "div") == 0){
-
-            //     writeNonArgCmdInFile(line, cmd, argument, hasArg, input, output, asm_listing, CMD_DIV);
-            //     continue;
-
-            // }else if (strIcmp(cmd, "out") == 0){
-
-            //     writeNonArgCmdInFile(line, cmd, argument, hasArg, input, output, asm_listing, CMD_OUT);
-            //     continue;
-
-            }else if (strIcmp(cmd, "hlt") == 0){
-
-                output->number_of_comands++;
-                output->code[output->ip++] = CMD_HLT;
-                
-                dumpCmd(line, cmd, 0, 0);
-                fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]);
-
-            }else if ((*(cmd + len) == ':') == 0){
+            if ((*(cmd + len) == ':') == 0){
                 
                 writeLabelInFile(line, cmd, input, output, asm_listing);
-            
+
+            }
             // }else if(strchr(input->lines[line], ';') != NULL)
             // {
             // }
 
             *cmd = -1;
-
-            }
+            
     }
 
     }  while(0);
@@ -359,32 +408,28 @@ int compile(Text_info *input, Asm_info *output)
     return EXIT_SUCCESS;
 }
 
-
-// int dumpCmd(int number_of_line, char * cmd, int argument, bool hasArg)
-// {
-//     switch(hasArg)
-//     {
-//        case true:  fprintf(stderr, "line - %d comand - %s argument - %d\n", number_of_line, cmd, argument);
-//                 break;
-//        case false:  fprintf(stderr, "line - %d comand - %s\n", number_of_line, cmd);
-//                 break;
-//        default: fprintf(stderr, "ERROR\n");
-//                 break;
-//     }
-//     return 0;
+int dumpCmd(int number_of_line, char * cmd, int argument, bool hasArg)
+{
+    switch(hasArg)
+    {
+       case true:  fprintf(stderr, "line - %d comand - %s argument - %d\n", number_of_line, cmd, argument);
+                break;
+       case false:  fprintf(stderr, "line - %d comand - %s\n", number_of_line, cmd);
+                break;
+       default: fprintf(stderr, "ERROR\n");
+                break;
+    }
+    return 0;
     
-// }
+}
 
 // int dumpAsm(Asm_info *output)
 // {
-
-
 // };
 
 //todo write strIcmp
 
-
-
+#undef GET_REG
 #undef DEF_CMD
 #undef ASSERT_OK
 #undef DBG

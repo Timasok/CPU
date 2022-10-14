@@ -7,7 +7,6 @@
 #define DBG printf("Compiled nicely -line: %d file: %s func: %s\n",                 \
                                                 __LINE__, __FILE__, __FUNCTION__)
 
-
 int main()
 {
 //todo add assert for apropriate name of source file 
@@ -29,6 +28,10 @@ int main()
     DBG;
     // fprintf(stderr, "%d %d\n", executable.ip, executable.number_of_comands);
     DBG;
+
+    if (executable.DNNTMSP == 0)
+        compile(&source, &executable);
+
 
     const char asm_name[] = "source.asm";
     FILE * asm_file = fopen(asm_name, "wb");

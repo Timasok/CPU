@@ -34,19 +34,12 @@ enum TEXT_ERRORS
     TEXT_ERROR_NUMBER_OF_LINES_IS_INAPROPRIATE  = 0x8
 };
 
+#define DEF_CMD(name, num, arg) \
+            CMD_##name = num,
+
 enum CMD
 {
-    CMD_PUSH = 1,
-    CMD_ADD  = 2,
-    CMD_SUB  = 3,
-    CMD_MUL  = 4,
-    CMD_DIV  = 5,
-    CMD_OUT  = 6,
-    CMD_DUP  = 7,
-    CMD_IN   = 8,
-    CMD_DMP  = 9,
-    CMD_JMP  = 10,
-    CMD_HLT  = 0
+    #include "../../inc/comands.h"
 };
 
 enum ASM_ERRORS
@@ -75,3 +68,6 @@ int dumpCmd(int number_of_line, char * cmd, int argument, bool hasArg);
 int returnTextError(Text_info * text);
 
 int getArgs(Asm_info *output, const char * arg_beginning);
+int pushDmp(const char* reg_var, int argument);
+
+#undef DEF_CMD

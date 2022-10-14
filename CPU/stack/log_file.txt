@@ -1,0 +1,8 @@
+fillWithPoison at src/stack_func.cpp(11)
+[0;31m ERROR: Data pointer = NULL
+ [0mStack[0x7ffe12c89050] stk1 at main at src/main.cpp(0)
+{
+size = 0
+capacity = -3
+data[(nil)]
+	}
