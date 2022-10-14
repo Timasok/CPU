@@ -22,7 +22,7 @@ struct Asm_info
     int number_of_comands;
     int ip;
     int * code;
-    int DNNTMSP = 1;
+    int DNNTMSP = 1;//do_not_need_to_make_second_passage
     //add number of filled labels
 };
 
@@ -41,6 +41,25 @@ enum CMD
 {
     #include "../../inc/comands.h"
 };
+
+enum MASKS
+{
+    IMMED_MASK = 0x20,
+    REG_MASK   = 0x40,
+    MEM_MASK   = 0x80,
+
+};
+
+    // DEF_CMD(PUSH_IMMED, 33, 1)
+
+    // DEF_CMD(PUSH_REG, 65, 1)
+
+    // DEF_CMD(PUSH_MEM_IMMED, 161, 1)
+
+    // DEF_CMD(PUSH_MEM_REG, 193, 1)
+
+    // DEF_CMD(PUSH_MEM_REG_IMMED, 225, 1)
+
 
 enum ASM_ERRORS
 {

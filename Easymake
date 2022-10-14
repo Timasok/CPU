@@ -1,0 +1,20 @@
+ASM_SRC_DIR = ASM/src/
+ASM_OBJ_DIR = ASM/obj/
+STK_SRC_DIR = CPU/stack/src/
+STK_OBJ_DIR = CPU/stack/obj/
+CPU_SRC_DIR = CPU/src/
+CPU_OBJ_DIR = CPU/obj/
+
+CC := g++
+CFLAGS := 
+
+SOURCES_ASM := $(ASM_SRC_DIR)main_ASM.cpp $(ASM_SRC_DIR)funcs_ASM.cpp
+SOURCES_CPU := $(CPU_SRC_DIR)main_CPU.cpp $(CPU_SRC_DIR)funcs_CPU.cpp $(STK_SRC_DIR)main.cpp $(STK_SRC_DIR)stack_funcs.cpp $(STK_SRC_DIR)debug_funcs.cpp
+
+EXECUTABLE_ASM := ASM_out
+EXECUTABLE_CPU := CPU_out
+
+all :
+	#$(CC) $(SOURCES_ASM) $(CFLAGS) -MD -o $(EXECUTABLE_ASM) -lm
+	$(CC) $(SOURCES_CPU) $(CFLAGS) -MD -o $(EXECUTABLE_CPU) -lm
+

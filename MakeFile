@@ -1,15 +1,23 @@
 all : ASM CPU
 
-STK_SRC_DIR = CPU/stack/src/
-STK_OBJ_DIR = CPU/stack/obj/
 ASM_SRC_DIR = ASM/src/
 ASM_OBJ_DIR = ASM/obj/
+STK_SRC_DIR = CPU/stack/src/
+STK_OBJ_DIR = CPU/stack/obj/
+CPU_SRC_DIR = CPU/src/
+CPU_OBJ_DIR = CPU/obj/
 
 CC = g++
 CFLAGS=-c -Wall
 
-CPU : $(STK_OBJ_DIR)main.o $(STK_OBJ_DIR)stack_funcs.o $(STK_OBJ_DIR)debug_funcs.o 
-	@$(CC) $(STK_OBJ_DIR)main.o $(STK_OBJ_DIR)stack_funcs.o $(STK_OBJ_DIR)debug_funcs.o -o CPU_out
+CPU :	$(CPU_OBJ_DIR)main_CPU.o $(CPU_OBJ_DIR)funcs_CPU.o $(STK_OBJ_DIR)main.o $(STK_OBJ_DIR)stack_funcs.o $(STK_OBJ_DIR)debug_funcs.o 
+	@$(CC) $(CPU_OBJ_DIR)main_CPU.o $(CPU_OBJ_DIR)funcs_CPU.o $(STK_OBJ_DIR)main.o $(STK_OBJ_DIR)stack_funcs.o $(STK_OBJ_DIR)debug_funcs.o -o CPU_out
+
+$(CPU_OBJ_DIR)main_CPU.o : $(CPU_SRC_DIR)main_CPU.cpp
+	@$(CC) $(CPU_SRC_DIR)main_CPU.cpp -c -o $(CPU_OBJ_DIR)main_CPU.o
+
+$(CPU_OBJ_DIR)funcs_CPU.o : $(CPU_SRC_DIR)funcs_CPU.cpp
+	@$(CC) $(CPU_SRC_DIR)funcs_CPU.cpp -c -o $(CPU_OBJ_DIR)funcs_CPU.o
 
 $(STK_OBJ_DIR)main.o : $(STK_SRC_DIR)main.cpp
 	@$(CC) $(STK_SRC_DIR)main.cpp -c -o $(STK_OBJ_DIR)main.o
@@ -20,7 +28,6 @@ $(STK_OBJ_DIR)stack_funcs.o : $(STK_SRC_DIR)stack_funcs.cpp
 $(STK_OBJ_DIR)debug_funcs.o : $(STK_SRC_DIR)debug_funcs.cpp
 	@$(CC) $(STK_SRC_DIR)debug_funcs.cpp -c -o $(STK_OBJ_DIR)debug_funcs.o
 	
-
 ASM: $(ASM_OBJ_DIR)main.o $(ASM_OBJ_DIR)funcs_ASM.o
 	@$(CC) $(ASM_OBJ_DIR)main.o $(ASM_OBJ_DIR)funcs_ASM.o -o ASM_out
 
@@ -33,7 +40,8 @@ $(ASM_OBJ_DIR)funcs_ASM.o: $(ASM_SRC_DIR)funcs_ASM.cpp
 mkdir:
 	mkdir $(ASM_OBJ_DIR) -p 
 	mkdir $(STK_OBJ_DIR) -p
+	mkdir $(CPU_OBJ_DIR) -p
 
 clean:
 	rm $(ASM_OBJ_DIR)*.o *.save ASM_out
-	rm $(STK_OBJ_DIR)*.o *.save CPU_out
+	rm $(CPU_OBJ_DIR)*.o *.save CPU_out

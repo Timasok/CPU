@@ -1,0 +1,8 @@
+$(CPU_OBJ_DIR)main_CPU.o $(CPU_OBJ_DIR)funcs_CPU.o 
+	@$(CC) $(CPU_OBJ_DIR)main_CPU.o $(CPU_OBJ_DIR)funcs_CPU.o -o CPU_out
+
+$(CPU_OBJ_DIR)main_CPU.o : $(CPU_SRC_DIR)main_CPU.cpp
+	@$(CC) $(CPU_SRC_DIR)main_CPU.cpp -c -o $(CPU_OBJ_DIR)main_CPU.o
+
+$(CPU_OBJ_DIR)funcs_CPU.o : $(CPU_SRC_DIR)funcs_CPU.cpp
+	@$(CC) $(CPU_SRC_DIR)funcs_CPU.cpp -c -o $(CPU_OBJ_DIR)funcs_CPU.o

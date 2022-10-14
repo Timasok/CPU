@@ -20,6 +20,9 @@
        }                                                                \
    } while (0)
 
+
+
+
 #define DBG fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n",            \
                                                 __LINE__, __FILE__, __FUNCTION__)
 
@@ -267,21 +270,24 @@ int getArgs(Asm_info *output, const char * arg_beginning)
     {
         case CMD_PUSH:
 
-            if (sscanf(arg_beginning, "%c%n", &test_for_ram, &shift) == 2)
+            if (sscanf(arg_beginning, " %c", &test_for_ram) == 1)
             {
-                if (test_for_ram == '[' /*&& strchr(arg_beginning, ']') != nullptr*/)
+                if (test_for_ram == '[' && strchr(arg_beginning, ']') != nullptr)
                 {
 
-                    if (sscanf(arg_beginning + shift, " %d", &argument) == 1)
+                    if (sscanf(strchr(arg_beginning, '[')+1, "%d", &argument) == 1)
                     {
                         fprintf(stderr, "[immed]\n");
+                        
                         pushDmp(reg_var, argument);
-                        output->code[output->ip - 1] = CMD_PUSH_MEM_IMMED;
+                        output->code[output->ip - 1] |= MEM_MASK;
+                        output->code[output->ip - 1] |= IMMED_MASK;
                         output->code[output->ip++] = argument;
                         break;
 
-                    }else if (sscanf(arg_beginning + shift, "%s", &reg_var) == 1)
+                    }else if (sscanf(strchr(arg_beginning, '[')+1, "%s", &reg_var) == 1)
                     {
+                        fprintf(stderr, "[reg]\n");                        
                         
                         reg_var[3] = '\0';
                         fprintf(stderr, "%s\n", reg_var);
@@ -289,26 +295,30 @@ int getArgs(Asm_info *output, const char * arg_beginning)
                         GET_REG;
                         pushDmp(reg_var, argument);
 
-                        output->code[output->ip - 1] = CMD_PUSH_MEM_REG;
+                        output->code[output->ip - 1] |= MEM_MASK;
+                        output->code[output->ip - 1] |= REG_MASK;
                         output->code[output->ip++] = argument;
                         break;
 
                     }
 
                 }   
-                
-            }else{              
+                } 
+            // else{              
                 
                 if (sscanf(arg_beginning, "%d", &argument) == 1)
                 {
+                    fprintf(stderr, "immed\n");                    
                     pushDmp(reg_var, argument);
-                    output->code[output->ip - 1] = CMD_PUSH_IMMED;
+                    output->code[output->ip - 1] |= IMMED_MASK;
                     output->code[output->ip++] = argument;
                     break;
 
                 }else {
 
-                    sscanf(arg_beginning + shift, "%s", &reg_var);
+                    fprintf(stderr, "reg\n");
+
+                    sscanf(arg_beginning, "%n%s", &shift, &reg_var);
                     
                     reg_var[3] = '\0';
                     fprintf(stderr, "%s\n", reg_var);
@@ -316,13 +326,13 @@ int getArgs(Asm_info *output, const char * arg_beginning)
                     GET_REG;
                     pushDmp(reg_var, argument);
 
-                    output->code[output->ip - 1] = CMD_PUSH_REG;
+                    output->code[output->ip - 1] |= REG_MASK;
                     output->code[output->ip++] = argument;
                     break;
 
                 }
 
-            }
+            // }
 
             fprintf(stderr, "GET HIGH");
             break;        
@@ -388,9 +398,6 @@ int compile(Text_info *input, Asm_info *output)
                 writeLabelInFile(line, cmd, input, output, asm_listing);
 
             }
-            // }else if(strchr(input->lines[line], ';') != NULL)
-            // {
-            // }
 
             *cmd = -1;
             
@@ -423,11 +430,12 @@ int dumpCmd(int number_of_line, char * cmd, int argument, bool hasArg)
     
 }
 
-// int dumpAsm(Asm_info *output)
-// {
-// };
+int dumpAsm(Asm_info *output, const char *name_of_file, const char *name_of_func, int number_of_line)
+{
+    
+   fprintf(stderr, "%s at %s(%d)\n", name_of_func, name_of_file, number_of_line);
 
-//todo write strIcmp
+};
 
 #undef GET_REG
 #undef DEF_CMD

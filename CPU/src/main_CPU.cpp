@@ -8,54 +8,59 @@
 
 #include "../include/funcs_CPU.h"
 #include "../stack/include/stack_funcs.h"
+// #include "../stack/include/debug_funcs.h"
+
+#define DBG fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n",            \
+                                                __LINE__, __FILE__, __FUNCTION__)
+
+
+int process(CPU_info * cpu, Stack * cpu_stack);
 
 FILE *err_file = fopen("../../err_file.txt","w");
 
 int main()
 {
-/*
-    // // const char file_name[] = "source.txt";
-    // const char file_name[] = "/../../source.txt";
 
-    // struct stat data = {};
-    // stat(file_name, &data);
-    // size_t buf_length = data.st_size;
-
-    // FILE * asm_file = fopen(file_name, "r");     
-    
-    // char * buf = (char *)calloc(buf_length + 2, sizeof(char));
-    // fread(buf, sizeof(char), buf_length, asm_file);
-    // fclose(asm_file);
-    // buf[buf_length] = '\0';
-
-    // int number_of_lines = 1;
-    // size_t counter = 0;
-    // while (counter < buf_length)
-    // {
-    //     if(buf[counter] == '\n')
-    //     {
-    //         buf[counter] = '\0';
-    //         number_of_lines++;
-    //     }
-    //     ++counter;
-    // }
-*/
     setvbuf(err_file, NULL, _IONBF, 0);
 
-    Stack stk1 = {};
+    FILE * asm_source = fopen("../../source.asm", "rb");
 
+    CPU_info cpu;
+    DBG;
+    fread(&cpu.version, sizeof(int), 1, asm_source);
+    fread(&cpu.quantity, sizeof(int), 1, asm_source);    
+    fread(&cpu.number_of_comands, sizeof(int), 1, asm_source);
+    DBG;
+    cpu.code = (int *)calloc(cpu.quantity, sizeof(int));
+    DBG;
+    fread(&cpu.code, sizeof(int), cpu.quantity, asm_source);
+    DBG;
+    Stack cpu_stack = {};
 
     elem_t value;  
 
-    stackCtor(stk1, 8);
-    printStack(&stk1);
+    stackCtor(cpu_stack, 8);
+    printStack(&cpu_stack);
 
-    stackPush(&stk1, 1.7);
-    printStack(&stk1);
+    stackPush(&cpu_stack, 1.7);
+    printStack(&cpu_stack);
 
-    stackDtor(&stk1);
-
+    stackDtor(&cpu_stack);
     fclose(err_file);       
+
+    return EXIT_SUCCESS;
+}
+
+int process(CPU_info * cpu, Stack * cpu_stack)
+{
+    cpu->ip = 0;
+
+    while (cpu->ip < cpu->quantity)
+    {
+        fprintf(stderr, "\n%d", cpu->code[cpu->ip++]);
+
+    }
+
 
     return EXIT_SUCCESS;
 }

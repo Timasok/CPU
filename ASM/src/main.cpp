@@ -9,6 +9,7 @@
 
 int main()
 {
+//todo rename main
 //todo add assert for apropriate name of source file 
     const char text_name[] = "source.txt";
 
@@ -40,7 +41,10 @@ int main()
     //     fprintf(asm_file, "\t%d\n", executable.code[counter]);
     
     DBG;
-    fwrite(executable.code, sizeof(int), executable.ip, asm_file);
+    fwrite ("CP", sizeof(int), 1, asm_file);
+    fwrite (&executable.ip, sizeof(int), 1, asm_file);
+    fwrite (&executable.number_of_comands, sizeof(int), 1, asm_file);
+    fwrite (executable.code, sizeof(int), executable.ip, asm_file);
     
     DBG;
     free(executable.code);

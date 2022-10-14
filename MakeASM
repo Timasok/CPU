@@ -1,12 +1,12 @@
-CC=g++
-CFLAGS=-c -Wall
-ASM_SRC_DIR = ASM/src/
-ASM_OBJ_DIR = ASM/obj/
+CC :=g++
+CFLAGS :=-c -Wall
+ASM_SRC_DIR := ASM/src/
+ASM_OBJ_DIR := ASM/obj/
 
 all: ASM
 
 ASM: $(ASM_OBJ_DIR)main.o $(ASM_OBJ_DIR)funcs_ASM.o
-	@$(CC) $(CFLAGS) $(ASM_OBJ_DIR)main.o $(ASM_OBJ_DIR)funcs_ASM.o -o ASM_out
+	@$(CC) $(CFLAGS) $(ASM_OBJ_DIR)main.o $(ASM_OBJ_DIR)funcs_ASM.o -o assembler
 
 $(ASM_OBJ_DIR)main.o: $(ASM_SRC_DIR)main.cpp 
 	@$(CC) $(ASM_SRC_DIR)main.cpp $(CFLAGS) -o $(ASM_OBJ_DIR)main.o
@@ -18,4 +18,4 @@ mkdir:
 	mkdir $(ASM_OBJ_DIR) -p
 
 clean:
-	rm $(ASM_OBJ_DIR)*.o *.save ASM_out
+	rm $(ASM_OBJ_DIR)*.o *.save assembler

@@ -1,0 +1,11 @@
+ASM_SRC_DIR = ASM/src/
+ASM_OBJ_DIR = ASM/obj/
+
+CC := g++
+CFLAGS := 
+
+SOURCES_ASM := $(ASM_SRC_DIR)main_ASM.cpp $(ASM_SRC_DIR)funcs_ASM.cpp
+
+EXECUTABLE_ASM := ASM_out
+
+all :	$(CC) $(SOURCES_ASM) -o $(EXECUTABLE_ASM)

@@ -1,7 +1,7 @@
 {
 size = 0
 capacity = 8
-data[0x5582fe446480]
+data[0x55b075b52480]
 code_of_error = 0
 	}
 	*[7] = 0.47228
@@ -17,7 +17,7 @@ code_of_error = 0
 {
 size = 1
 capacity = 8
-data[0x5582fe446480]
+data[0x55b075b52480]
 code_of_error = 0
 	}
 	*[7] = 0.47228
