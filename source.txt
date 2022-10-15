@@ -1,11 +1,5 @@
-push [rax]
-push [1]
-push 190
-push rcx
-add
-add
-mul
-out
+push 1
+push 2
 add
 out
 hlt

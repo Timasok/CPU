@@ -6,61 +6,44 @@
 #include <stdio.h>
 #include <sys/stat.h>
 
+//todo use -I flag
 #include "../include/funcs_CPU.h"
-#include "../stack/include/stack_funcs.h"
-// #include "../stack/include/debug_funcs.h"
 
+//todo we need to add log file in CPU struct
+
+#define DEBUG_MODE
+
+#ifdef DEBUG_MODE
 #define DBG fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n",            \
                                                 __LINE__, __FILE__, __FUNCTION__)
+#endif
+#ifndef DEBUG_MODE
+#define DBG
+#endif
 
-
-int process(CPU_info * cpu, Stack * cpu_stack);
 
 FILE *err_file = fopen("../../err_file.txt","w");
 
-int main()
+int main(int argc, const char* argv[])
 {
 
     setvbuf(err_file, NULL, _IONBF, 0);
 
-    FILE * asm_source = fopen("../../source.asm", "rb");
+    FILE * asm_source = fopen("source.asm", "rb");
 
+    FILE * log_file = fopen("log_file.txt", "w");        
+    
     CPU_info cpu;
-    DBG;
-    fread(&cpu.version, sizeof(int), 1, asm_source);
-    fread(&cpu.quantity, sizeof(int), 1, asm_source);    
-    fread(&cpu.number_of_comands, sizeof(int), 1, asm_source);
-    DBG;
-    cpu.code = (int *)calloc(cpu.quantity, sizeof(int));
-    DBG;
-    fread(&cpu.code, sizeof(int), cpu.quantity, asm_source);
-    DBG;
+    CPU_Ctor(&cpu, asm_source);
+    dump_CPU(&cpu, log_file);
+
     Stack cpu_stack = {};
-
-    elem_t value;  
-
-    stackCtor(cpu_stack, 8);
+    DBG;
     printStack(&cpu_stack);
-
-    stackPush(&cpu_stack, 1.7);
-    printStack(&cpu_stack);
-
-    stackDtor(&cpu_stack);
-    fclose(err_file);       
-
+    process(&cpu, &cpu_stack);
+    DBG;
+    fcloseall();
     return EXIT_SUCCESS;
 }
 
-int process(CPU_info * cpu, Stack * cpu_stack)
-{
-    cpu->ip = 0;
-
-    while (cpu->ip < cpu->quantity)
-    {
-        fprintf(stderr, "\n%d", cpu->code[cpu->ip++]);
-
-    }
-
-
-    return EXIT_SUCCESS;
-}
+#undef DBG

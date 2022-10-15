@@ -50,17 +50,6 @@ enum MASKS
 
 };
 
-    // DEF_CMD(PUSH_IMMED, 33, 1)
-
-    // DEF_CMD(PUSH_REG, 65, 1)
-
-    // DEF_CMD(PUSH_MEM_IMMED, 161, 1)
-
-    // DEF_CMD(PUSH_MEM_REG, 193, 1)
-
-    // DEF_CMD(PUSH_MEM_REG_IMMED, 225, 1)
-
-
 enum ASM_ERRORS
 {
     ERROR_INVALID_FILE_POINTER          = 0x1,

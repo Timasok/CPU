@@ -6,7 +6,6 @@
 #include <stdio.h>
 
 #include "../include/debug_funcs.h"
-#include "../include/object_funcs.h"
 
 #define LOCATION(reason) fprintf(stderr, "%s: file: %s func: %s line: %d\n", reason, \
                                  __FILE__, __FUNCTION__, __LINE__)
@@ -99,40 +98,40 @@ const char *stackStrError(Stack *stk)
    return result;
 }
 
+//todo printElementType
 static void printElement(Stack *stk, int index)
 {
-   fprintf(err_file, "\t*[%d] = %g\n", index, *(stk->data + index)); 
+   fprintf(stderr, "\t*[%d] = %d\n", index, *(stk->data + index)); 
 
 }
 
-
 void printStack(Stack *stk)
 {
-   fprintf(err_file, "{\n");
-   fprintf(err_file, "size = %d\n", stk->size);
-   fprintf(err_file, "capacity = %d\n", stk->capacity);
-   fprintf(err_file, "data[%p]\n" , stk->data); 
-   fprintf(err_file, "code_of_error = %d\n", stk->code_of_error);
-   fprintf(err_file, "\t}\n");
+   fprintf(stderr, "{\n");
+   fprintf(stderr, "size = %d\n", stk->size);
+   fprintf(stderr, "capacity = %d\n", stk->capacity);
+   fprintf(stderr, "data[%p]\n" , stk->data); 
+   fprintf(stderr, "code_of_error = %d\n", stk->code_of_error);
+   fprintf(stderr, "\t}\n");
 
    int counter = stk->capacity;
    while(--counter >= 0)
    {
       if(counter == stk->size - 1)
-         fputs(POISON_BORDER, err_file);
+         fputs(POISON_BORDER, stderr);
 
       printElement(stk, counter);
 
    }
 
-   fprintf(err_file, "\t}\n}\n");
+   fprintf(stderr, "\t}\n}\n");
    
 }
 
 void printVarInfo(Stack *stk)
 {
    ASSERT_OK(stk);
-   fprintf(err_file, "Stack[%p] "
+   fprintf(stderr, "Stack[%p] "
                      "%s"
                      " at %s at %s(%d)\n",
            stk,
@@ -145,9 +144,9 @@ void stackDump(Stack *stk, const char *name_of_file, const char *name_of_func,
                       int number_of_line)
 {
 
-   fprintf(err_file, "%s at %s(%d)\n", name_of_func, name_of_file, number_of_line);
+   fprintf(stderr, "%s at %s(%d)\n", name_of_func, name_of_file, number_of_line);
 
-   fprintf(err_file, "\e[0;31m%s\e[0m", stackStrError(stk));
+   fprintf(stderr, "\e[0;31m%s\e[0m", stackStrError(stk));
 
    printVarInfo(stk);
 

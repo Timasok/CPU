@@ -6,15 +6,12 @@
 #include <errno.h>
 
 #include "../include/debug_funcs.h"
-#include "../include/object_funcs.h"
 
-#define ASSERT_OK(stkPtr)                                     \
+#define ASSERT_OK(stkPtr)                                        \
 //    do{                                                        \
 //       if (returnStackError(stkPtr))                           \
 //          stackDump(stkPtr, __FILE__, __FUNCTION__, __LINE__); \
 //    } while (0)
-
-static const elem_t POISON = 0.47228;
 
 static void * getStackElement(Stack * stk, int index)
 {
@@ -65,13 +62,13 @@ void stack_Ctor(Stack *stk, size_t capacity, const char * name_of_var,
 {   
     ASSERT_OK(stk);
 
-    // stk->var_info = {.name_of_var  = name_of_var, 
-    //.name_of_file = name_of_file, .name_of_func = name_of_func, .number_of_line  = number_of_line};
+    stk->var_info = {.name_of_var  = name_of_var, 
+    .name_of_file = name_of_file, .name_of_func = name_of_func, .number_of_line  = number_of_line};
 
-    stk->var_info.name_of_var  = name_of_var;
-    stk->var_info.name_of_file = name_of_file;
-    stk->var_info.name_of_func = name_of_func;
-    stk->var_info.number_of_line  = number_of_line;
+    // stk->var_info.name_of_var  = name_of_var;
+    // stk->var_info.name_of_file = name_of_file;
+    // stk->var_info.name_of_func = name_of_func;
+    // stk->var_info.number_of_line  = number_of_line;
 
     hardAssert(stk != NULL);
 
@@ -109,7 +106,7 @@ void stackPop(Stack *stk, elem_t * element)
 
     if (stk->size == 0)
     {
-        fprintf(err_file,"You attained the end of stack\n");
+        fprintf(stderr,"You attained the end of stack\n");
         return ;
     }
 

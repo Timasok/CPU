@@ -1,10 +1,13 @@
 //this header contains all objects and direct operations with 'em
-#include <stdlib.h>
+#ifndef OBJ_STRUCTS_CONSTS_H
+#define OBJ_STRUCTS_CONSTS_H
 
 typedef unsigned long long canary_t;
-typedef double elem_t;
+typedef int elem_t;
 
-extern FILE *err_file;
+// extern FILE * stderr = fopen("../../stderr.txt","w");
+
+const elem_t POISON = 0xC0FFEE;
 
 enum Stack_Error 
 {
@@ -52,4 +55,6 @@ struct Stack
 
 const int STACK_RESIZE_IF_POP          = 4;
 const int STACK_RESIZE_IF_PUSH         = 2;
-const char POISON_BORDER[] = "----------------------POISON BORDER ------------------------\n"; 
+const char POISON_BORDER[] = "----------------------POISON BORDER ------------------------\n";
+
+#endif

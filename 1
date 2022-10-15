@@ -1,0 +1,201 @@
+ASM/src/funcs_ASM.cpp:17:73: warning: backslash and newline separated by space
+   17 |        {  fprintf(stderr, "DUMP_CALLED: file: %s func: %s line: %d\n",  \
+      |                                                                          
+ASM/src/funcs_ASM.cpp:31:81: warning: backslash and newline separated by space
+   31 |     {                                                                           \
+      |                                                                                  
+ASM/src/funcs_ASM.cpp:42:81: warning: backslash and newline separated by space
+   42 |                                                                                 \
+      |                                                                                  
+ASM/src/funcs_ASM.cpp: In function ‘int printText(Text_info*)’:
+ASM/src/funcs_ASM.cpp:158:38: warning: format ‘%d’ expects argument of type ‘int’, but argument 3 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
+  158 |     fprintf(stderr, "  buf_length = %d\n  number_of_lines = %d\n  buf: \n%s\n", text->buf_length, text->number_of_lines, text->buf);
+      |                                     ~^                                          ~~~~~~~~~~~~~~~~
+      |                                      |                                                |
+      |                                      int                                              size_t {aka long unsigned int}
+      |                                     %ld
+ASM/src/funcs_ASM.cpp: In function ‘int strChr(char*, char)’:
+ASM/src/funcs_ASM.cpp:200:16: warning: converting to non-pointer type ‘int’ from NULL [-Wconversion-null]
+  200 |         return NULL;
+      |                ^~~~
+ASM/src/funcs_ASM.cpp: In function ‘int pushDmp(const char*, int)’:
+ASM/src/funcs_ASM.cpp:219:1: warning: no return statement in function returning non-void [-Wreturn-type]
+  219 | }
+      | ^
+ASM/src/funcs_ASM.cpp: In function ‘int writeLabelInFile(int, char*, Text_info*, Asm_info*, FILE*)’:
+ASM/src/funcs_ASM.cpp:256:29: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+  256 |     dumpCmd(number_of_line, "label", label_idx, 1);
+      |                             ^~~~~~~
+ASM/src/funcs_ASM.cpp: In function ‘int getArgs(Asm_info*, const char*)’:
+ASM/src/funcs_ASM.cpp:288:70: warning: format ‘%s’ expects argument of type ‘char*’, but argument 3 has type ‘char (*)[228]’ [-Wformat=]
+  288 |                     }else if (sscanf(strchr(arg_beginning, '[')+1, "%s", &reg_var) == 1)
+      |                                                                     ~^   ~~~~~~~~
+      |                                                                      |   |
+      |                                                                      |   char (*)[228]
+      |                                                                      char*
+ASM/src/funcs_ASM.cpp:55:30: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   55 |         if (strIcmp(reg_var, "rax") == 0)                                       \
+      |                              ^~~~~
+ASM/src/funcs_ASM.cpp:295:25: note: in expansion of macro ‘GET_REG’
+  295 |                         GET_REG;
+      |                         ^~~~~~~
+ASM/src/funcs_ASM.cpp:59:35: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   59 |         }else if(strIcmp(reg_var, "rbx") == 0)                                  \
+      |                                   ^~~~~
+ASM/src/funcs_ASM.cpp:295:25: note: in expansion of macro ‘GET_REG’
+  295 |                         GET_REG;
+      |                         ^~~~~~~
+ASM/src/funcs_ASM.cpp:63:35: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   63 |         }else if(strIcmp(reg_var, "rcx") == 0)                                  \
+      |                                   ^~~~~
+ASM/src/funcs_ASM.cpp:295:25: note: in expansion of macro ‘GET_REG’
+  295 |                         GET_REG;
+      |                         ^~~~~~~
+ASM/src/funcs_ASM.cpp:67:35: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   67 |         }else if(strIcmp(reg_var, "rdx") == 0)                                  \
+      |                                   ^~~~~
+ASM/src/funcs_ASM.cpp:295:25: note: in expansion of macro ‘GET_REG’
+  295 |                         GET_REG;
+      |                         ^~~~~~~
+ASM/src/funcs_ASM.cpp:321:47: warning: format ‘%s’ expects argument of type ‘char*’, but argument 4 has type ‘char (*)[228]’ [-Wformat=]
+  321 |                     sscanf(arg_beginning, "%n%s", &shift, &reg_var);
+      |                                              ~^           ~~~~~~~~
+      |                                               |           |
+      |                                               char*       char (*)[228]
+ASM/src/funcs_ASM.cpp:55:30: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   55 |         if (strIcmp(reg_var, "rax") == 0)                                       \
+      |                              ^~~~~
+ASM/src/funcs_ASM.cpp:326:21: note: in expansion of macro ‘GET_REG’
+  326 |                     GET_REG;
+      |                     ^~~~~~~
+ASM/src/funcs_ASM.cpp:59:35: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   59 |         }else if(strIcmp(reg_var, "rbx") == 0)                                  \
+      |                                   ^~~~~
+ASM/src/funcs_ASM.cpp:326:21: note: in expansion of macro ‘GET_REG’
+  326 |                     GET_REG;
+      |                     ^~~~~~~
+ASM/src/funcs_ASM.cpp:63:35: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   63 |         }else if(strIcmp(reg_var, "rcx") == 0)                                  \
+      |                                   ^~~~~
+ASM/src/funcs_ASM.cpp:326:21: note: in expansion of macro ‘GET_REG’
+  326 |                     GET_REG;
+      |                     ^~~~~~~
+ASM/src/funcs_ASM.cpp:67:35: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   67 |         }else if(strIcmp(reg_var, "rdx") == 0)                                  \
+      |                                   ^~~~~
+ASM/src/funcs_ASM.cpp:326:21: note: in expansion of macro ‘GET_REG’
+  326 |                     GET_REG;
+      |                     ^~~~~~~
+ASM/src/../../inc/comands.h: In function ‘int compile(Text_info*, Asm_info*)’:
+ASM/src/../../inc/comands.h:1:19: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+    1 | DEF_CMD(PUSH, 1, 1)
+      |                   ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:3:19: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+    3 | DEF_CMD (ADD, 2, 0)
+      |                   ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:5:19: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+    5 | DEF_CMD (SUB, 3, 0)
+      |                   ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:7:19: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+    7 | DEF_CMD (MUL, 4, 0)
+      |                   ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:9:19: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+    9 | DEF_CMD (DIV, 5, 0)
+      |                   ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:11:18: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   11 | DEF_CMD(OUT, 6, 0)
+      |                  ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:13:18: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   13 | DEF_CMD(DUP, 7, 0)
+      |                  ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:15:17: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   15 | DEF_CMD(IN, 8, 0)
+      |                 ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:17:18: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   17 | DEF_CMD(DMP, 9, 0)
+      |                  ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:19:19: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   19 | DEF_CMD(JMP, 10, 1)
+      |                   ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:21:18: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   21 | DEF_CMD(JB, 11, 1)
+      |                  ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:23:19: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   23 | DEF_CMD(JBE, 12, 1)
+      |                   ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:25:18: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   25 | DEF_CMD(JA, 13, 1)
+      |                  ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:27:19: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   27 | DEF_CMD(JAE, 14, 1)
+      |                   ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:29:18: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   29 | DEF_CMD(JE, 15, 1)
+      |                  ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:31:19: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   31 | DEF_CMD(JNE, 16, 1)
+      |                   ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/../../inc/comands.h:33:18: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   33 | DEF_CMD(HLT, 0, 0)
+      |                  ^
+ASM/src/funcs_ASM.cpp:30:27: note: in definition of macro ‘DEF_CMD’
+   30 |         if (strIcmp(cmd, #name) == 0)                                           \
+      |                           ^~~~
+ASM/src/funcs_ASM.cpp: In function ‘int dumpCmd(int, char*, int, bool)’:
+ASM/src/funcs_ASM.cpp:420:11: warning: switch condition has boolean value [-Wswitch-bool]
+  420 |     switch(hasArg)
+      |           ^
+ASM/src/funcs_ASM.cpp: In function ‘int dumpAsm(Asm_info*, const char*, const char*, int)’:
+ASM/src/funcs_ASM.cpp:438:1: warning: no return statement in function returning non-void [-Wreturn-type]
+  438 | };
+      | ^
+/usr/bin/ld: cannot find 2: No such file or directory
+collect2: error: ld returned 1 exit status
