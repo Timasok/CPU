@@ -1,6 +1,6 @@
 #include "../stack/include/stack_funcs.h"
 
-#define DEF_CMD(name, num, arg) \
+#define DEF_CMD(name, num, arg, ...) \
             CMD_##name = num,
 
 
@@ -14,6 +14,7 @@ struct CPU_info
     int ip;
     int quantity;
     int * code;
+    int Reg[5];
 
 };
 

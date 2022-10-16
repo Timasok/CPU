@@ -1,0 +1,185 @@
+# 0 "CPU/src/funcs_CPU.cpp"
+# 0 "<built-in>"
+# 0 "<command-line>"
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+# 0 "<command-line>" 2
+# 1 "CPU/src/funcs_CPU.cpp"
+# 9 "CPU/src/funcs_CPU.cpp"
+# 1 "CPU/src/../include/funcs_CPU.h" 1
+
+
+
+
+
+
+struct CPU_info
+{
+
+
+
+    int signature;
+    int number_of_comands;
+    int ip;
+    int quantity;
+    int * code;
+    int Reg[5];
+
+};
+
+enum CMD
+{
+# 1 "CPU/src/../include/../../inc/comands.h" 1
+CMD_PUSH = 1,
+
+CMD_ADD = 2,
+
+CMD_SUB = 3,
+
+CMD_MUL = 4,
+
+CMD_DIV = 5,
+
+CMD_OUT = 6,
+
+CMD_DUP = 7,
+
+CMD_IN = 8,
+
+CMD_DMP = 9,
+
+CMD_JMP = 10,
+
+CMD_JB = 11,
+
+CMD_JBE = 12,
+
+CMD_JA = 13,
+
+CMD_JAE = 14,
+
+CMD_JE = 15,
+
+CMD_JNE = 16,
+
+CMD_HLT = 0,
+# 24 "CPU/src/../include/funcs_CPU.h" 2
+};
+
+enum MASKS
+{
+    IMMED_MASK = 0x20,
+    REG_MASK = 0x40,
+    MEM_MASK = 0x80,
+
+};
+
+
+
+int dump_CMD_CPU(int ip, int CMD, Stack * cpu_stack, bool stackChanged);
+int CPU_Ctor(CPU_info * cpu, FILE * asm_source);
+int dump_CPU(CPU_info *cpu, FILE * log_file);
+int process(CPU_info * cpu, Stack * cpu_stack);
+# 10 "CPU/src/funcs_CPU.cpp" 2
+# 49 "CPU/src/funcs_CPU.cpp"
+int CPU_Ctor(CPU_info * cpu, FILE * asm_source)
+{
+
+    fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n", 52, "CPU/src/funcs_CPU.cpp", __FUNCTION__);
+    fread(&cpu->signature, sizeof(int), 1, asm_source);
+
+
+
+    fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n", 57, "CPU/src/funcs_CPU.cpp", __FUNCTION__);
+    fread(&cpu->quantity, sizeof(int), 1, asm_source);
+    fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n", 59, "CPU/src/funcs_CPU.cpp", __FUNCTION__);
+    fread(&cpu->number_of_comands, sizeof(int), 1, asm_source);
+    fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n", 61, "CPU/src/funcs_CPU.cpp", __FUNCTION__);
+    cpu->code = (int *)calloc(cpu->quantity, sizeof(int));
+
+    fread(cpu->code, sizeof(int), cpu->quantity, asm_source);
+
+    return EXIT_SUCCESS;
+}
+
+int process(CPU_info * cpu, Stack * cpu_stack)
+{
+
+    cpu->ip = 0;
+    stackCtor(* cpu_stack, cpu->number_of_comands);
+
+    while (cpu->ip < cpu->quantity)
+    {
+        elem_t first_popped = 0, second_popped = 0;
+        fprintf(stderr,"%d\n", cpu->code[cpu->ip]);
+        switch(cpu->code[cpu->ip++])
+        {
+            case (CMD_PUSH | IMMED_MASK):
+            {
+                stackPush(cpu_stack, cpu->code[cpu->ip++]);
+
+                fprintf(stderr, "push %d\n", cpu->code[cpu->ip - 1]);
+
+                dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1);
+                break;
+            }
+            case CMD_ADD:
+            {
+
+                do { stackPop(cpu_stack, &first_popped); } while (0);
+                do { stackPop(cpu_stack, &second_popped); } while (0);
+                do { stackPush(cpu_stack, first_popped + second_popped); } while (0);
+                fprintf(stderr, "add %d %d\n", first_popped, second_popped);
+# 106 "CPU/src/funcs_CPU.cpp"
+                dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1);
+                break;
+            }
+            case CMD_OUT:
+            {
+                elem_t out = 0;
+
+                stackPop(cpu_stack, &out);
+
+                fprintf(stderr, "%d\n", out);
+                dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1);
+                break;
+            }
+            case CMD_HLT:
+            {
+                dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0);
+                stackDtor(cpu_stack);
+                break;
+            }
+
+
+        }
+
+    }
+
+    return EXIT_SUCCESS;
+}
+
+int dump_CPU(CPU_info *cpu, FILE * log_file)
+{
+    fprintf(log_file, "\nSIGNATURE: %s\n"
+                        "QUANTITY:  %d\n"
+                        "NUMBER OF COMANDS: %d\n"
+                      ,&(cpu->signature), cpu->quantity, cpu->number_of_comands);
+
+    for (int ip = 0; ip < cpu->quantity; ip++)
+        fprintf(log_file, "%d\t", cpu->code[ip]);
+
+    fprintf(log_file, "\n");
+
+}
+
+int dump_CMD_CPU(int ip, int CMD, Stack * cpu_stack, bool stackChanged)
+{
+    fprintf(stderr, "\nComand - %d ip - %d\n", CMD, ip);
+
+    if (stackChanged)
+    {
+        fprintf(stderr, "STACK CHANGED!\n");
+        printStack(cpu_stack);
+    }
+
+}

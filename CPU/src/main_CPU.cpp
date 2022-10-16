@@ -39,9 +39,12 @@ int main(int argc, const char* argv[])
 
     Stack cpu_stack = {};
     DBG;
-    printStack(&cpu_stack);
+
     process(&cpu, &cpu_stack);
+    // printStack(&cpu_stack);
     DBG;
+    free(cpu.code);
+
     fcloseall();
     return EXIT_SUCCESS;
 }

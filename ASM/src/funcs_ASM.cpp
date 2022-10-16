@@ -21,12 +21,10 @@
    } while (0)
 
 
-
-
 #define DBG fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n",            \
                                                 __LINE__, __FILE__, __FUNCTION__)
 
-#define DEF_CMD(name, num, arg)                                                 \
+#define DEF_CMD(name, num, arg, ...)                                            \
         if (strIcmp(cmd, #name) == 0)                                           \
     {                                                                           \        
                                                                                 \

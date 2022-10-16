@@ -7,7 +7,7 @@ typedef int elem_t;
 
 // extern FILE * stderr = fopen("../../stderr.txt","w");
 
-const elem_t POISON = 0xC0FFEE;
+const elem_t POISON = 0xFFFFFFFF;
 
 enum Stack_Error 
 {

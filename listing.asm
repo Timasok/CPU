@@ -3,4 +3,5 @@ adr 	cmd   arg 	source
 0003	01	  21	push 2
 0005	02  		add
 0006	06  		out
-0007	00  		hlt
+0007	06  		out
+0008	00  		hlt

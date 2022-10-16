@@ -34,7 +34,7 @@ enum TEXT_ERRORS
     TEXT_ERROR_NUMBER_OF_LINES_IS_INAPROPRIATE  = 0x8
 };
 
-#define DEF_CMD(name, num, arg) \
+#define DEF_CMD(name, num, arg, ...) \
             CMD_##name = num,
 
 enum CMD

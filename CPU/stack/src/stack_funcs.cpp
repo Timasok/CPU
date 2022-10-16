@@ -20,12 +20,13 @@ static void * getStackElement(Stack * stk, int index)
 
 }
 
+//todo I don't use it yet
 static void setStackElement(Stack * stk, int index, elem_t element)
 {
     hardAssert(element != NULL);
     hardAssert(stk != NULL);
 
-    *(stk->data + index) = element;
+    stk->data[index] = element;
       
 }
 
@@ -93,8 +94,10 @@ void stackPush(Stack *stk, elem_t element)
     if (stk->size >= stk->capacity)
         stackResize(stk, stk->capacity * STACK_RESIZE_IF_PUSH); 
 
-    setStackElement(stk, stk->size, element);
-    stk->size++;
+    // setStackElement(stk, stk->size, element);
+
+    fprintf(stderr, "%d\n", stk->size);
+    stk->data[stk->size++] = element;
 
     ASSERT_OK(stk);
 
@@ -113,9 +116,11 @@ void stackPop(Stack *stk, elem_t * element)
     if (stk->size * STACK_RESIZE_IF_POP < stk->capacity)
         stackResize(stk, stk->capacity);
 
-    elem_t result = *(elem_t *)getStackElement(stk, stk->size-1);
-
-    setStackElement(stk,--stk->size, POISON);
+    // *element = *(elem_t *)getStackElement(stk, stk->size-1);
+    // setStackElement(stk,--stk->size, POISON);
+    fprintf(stderr, "%d\n", stk->size);
+    *element = stk->data[stk->size-1];
+    stk->data[--stk->size] = POISON;
 
     ASSERT_OK(stk);
 

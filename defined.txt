@@ -1,0 +1,684 @@
+# 0 "ASM/src/main.cpp"
+# 0 "<built-in>"
+# 0 "<command-line>"
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+# 0 "<command-line>" 2
+# 1 "ASM/src/main.cpp"
+
+
+
+# 1 "ASM/src/../include/funcs_ASM.h" 1
+
+
+
+const int LABELS_SIZE = 5;
+const int LABEL_POISON = 0xFF;
+
+struct Text_info
+{
+    FILE * source_file;
+    char *buf;
+    size_t buf_length;
+    int number_of_lines;
+    const char ** lines;
+    int code_of_error;
+
+};
+
+struct Asm_info
+{
+    int labels[LABELS_SIZE] = {};
+    int version;
+    int number_of_comands;
+    int ip;
+    int * code;
+    int DNNTMSP = 1;
+
+};
+
+enum TEXT_ERRORS
+{
+    TEXT_ERROR_SOURCE_FILE_IS_NULL = 0x1,
+    TEXT_ERROR_BUF_IS_NULL = 0x2,
+    TEXT_ERROR_LINES_IS_NULL = 0x4,
+    TEXT_ERROR_NUMBER_OF_LINES_IS_INAPROPRIATE = 0x8
+};
+
+
+
+
+enum CMD
+{
+# 1 "ASM/src/../include/../../inc/comands.h" 1
+CMD_PUSH = 1,
+
+CMD_ADD = 2,
+
+CMD_SUB = 3,
+
+CMD_MUL = 4,
+
+CMD_DIV = 5,
+
+CMD_OUT = 6,
+
+CMD_DUP = 7,
+
+CMD_IN = 8,
+
+CMD_DMP = 9,
+
+CMD_JMP = 10,
+
+CMD_JB = 11,
+
+CMD_JBE = 12,
+
+CMD_JA = 13,
+
+CMD_JAE = 14,
+
+CMD_JE = 15,
+
+CMD_JNE = 16,
+
+CMD_HLT = 0,
+# 43 "ASM/src/../include/funcs_ASM.h" 2
+};
+
+enum MASKS
+{
+    IMMED_MASK = 0x20,
+    REG_MASK = 0x40,
+    MEM_MASK = 0x80,
+
+};
+
+enum ASM_ERRORS
+{
+    ERROR_INVALID_FILE_POINTER = 0x1,
+    ERROR_STAT_IS_NULL = 0x2,
+    ERROR_LABEL_IS_DEFINED_TWICE = 0x4,
+    ERROR_ATTEMP_TO_USE_UNDEFINED_LABEL = 0x8,
+    ERROR_INCORRECT_JMPARG_FORMAT = 0x10
+
+};
+
+int textDtor(Text_info * text);
+int printText(Text_info * text);
+
+
+int strIcmp(char *s, char *t);
+int strChr(char *cs, char c);
+
+
+int textCtor(Text_info * text, const char * file_name);
+int compile(Text_info *input, Asm_info *output);
+
+int dumpAsm(Asm_info *output);
+int dumpCmd(int number_of_line, char * cmd, int argument, bool hasArg);
+int returnTextError(Text_info * text);
+
+int getArgs(Asm_info *output, const char * arg_beginning);
+int pushDmp(const char* reg_var, int argument);
+# 5 "ASM/src/main.cpp" 2
+
+
+
+
+int main()
+{
+
+
+    const char text_name[] = "source.txt";
+
+    Text_info source;
+    printf("Compiled nicely -line: %d file: %s func: %s\n", 16, "ASM/src/main.cpp", __FUNCTION__);
+    textCtor(&source, text_name);
+    printf("Compiled nicely -line: %d file: %s func: %s\n", 18, "ASM/src/main.cpp", __FUNCTION__);
+    printText(&source);
+    printf("Compiled nicely -line: %d file: %s func: %s\n", 20, "ASM/src/main.cpp", __FUNCTION__);
+    Asm_info executable;
+    printf("Compiled nicely -line: %d file: %s func: %s\n", 22, "ASM/src/main.cpp", __FUNCTION__);
+    memset(executable.labels, LABEL_POISON, LABELS_SIZE * sizeof(int));
+    printf("Compiled nicely -line: %d file: %s func: %s\n", 24, "ASM/src/main.cpp", __FUNCTION__);
+    executable.code = (int *)calloc(2 * source.number_of_lines + 1, sizeof(int));
+    printf("Compiled nicely -line: %d file: %s func: %s\n", 26, "ASM/src/main.cpp", __FUNCTION__);
+    compile(&source, &executable);
+    printf("Compiled nicely -line: %d file: %s func: %s\n", 28, "ASM/src/main.cpp", __FUNCTION__);
+
+    printf("Compiled nicely -line: %d file: %s func: %s\n", 30, "ASM/src/main.cpp", __FUNCTION__);
+
+    if (executable.DNNTMSP == 0)
+        compile(&source, &executable);
+
+
+    const char asm_name[] = "source.asm";
+    FILE * asm_file = fopen(asm_name, "wb");
+
+
+
+
+    printf("Compiled nicely -line: %d file: %s func: %s\n", 42, "ASM/src/main.cpp", __FUNCTION__);
+    fwrite ("CP", sizeof(int), 1, asm_file);
+    fwrite (&executable.ip, sizeof(int), 1, asm_file);
+    fwrite (&executable.number_of_comands, sizeof(int), 1, asm_file);
+    fwrite (executable.code, sizeof(int), executable.ip, asm_file);
+
+    printf("Compiled nicely -line: %d file: %s func: %s\n", 48, "ASM/src/main.cpp", __FUNCTION__);
+    free(executable.code);
+
+    return EXIT_SUCCESS;
+}
+# 0 "ASM/src/funcs_ASM.cpp"
+# 0 "<built-in>"
+# 0 "<command-line>"
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+# 0 "<command-line>" 2
+# 1 "ASM/src/funcs_ASM.cpp"
+# 9 "ASM/src/funcs_ASM.cpp"
+# 1 "ASM/src/../include/funcs_ASM.h" 1
+
+
+
+const int LABELS_SIZE = 5;
+const int LABEL_POISON = 0xFF;
+
+struct Text_info
+{
+    FILE * source_file;
+    char *buf;
+    size_t buf_length;
+    int number_of_lines;
+    const char ** lines;
+    int code_of_error;
+
+};
+
+struct Asm_info
+{
+    int labels[LABELS_SIZE] = {};
+    int version;
+    int number_of_comands;
+    int ip;
+    int * code;
+    int DNNTMSP = 1;
+
+};
+
+enum TEXT_ERRORS
+{
+    TEXT_ERROR_SOURCE_FILE_IS_NULL = 0x1,
+    TEXT_ERROR_BUF_IS_NULL = 0x2,
+    TEXT_ERROR_LINES_IS_NULL = 0x4,
+    TEXT_ERROR_NUMBER_OF_LINES_IS_INAPROPRIATE = 0x8
+};
+
+
+
+
+enum CMD
+{
+# 1 "ASM/src/../include/../../inc/comands.h" 1
+CMD_PUSH = 1,
+
+CMD_ADD = 2,
+
+CMD_SUB = 3,
+
+CMD_MUL = 4,
+
+CMD_DIV = 5,
+
+CMD_OUT = 6,
+
+CMD_DUP = 7,
+
+CMD_IN = 8,
+
+CMD_DMP = 9,
+
+CMD_JMP = 10,
+
+CMD_JB = 11,
+
+CMD_JBE = 12,
+
+CMD_JA = 13,
+
+CMD_JAE = 14,
+
+CMD_JE = 15,
+
+CMD_JNE = 16,
+
+CMD_HLT = 0,
+# 43 "ASM/src/../include/funcs_ASM.h" 2
+};
+
+enum MASKS
+{
+    IMMED_MASK = 0x20,
+    REG_MASK = 0x40,
+    MEM_MASK = 0x80,
+
+};
+
+enum ASM_ERRORS
+{
+    ERROR_INVALID_FILE_POINTER = 0x1,
+    ERROR_STAT_IS_NULL = 0x2,
+    ERROR_LABEL_IS_DEFINED_TWICE = 0x4,
+    ERROR_ATTEMP_TO_USE_UNDEFINED_LABEL = 0x8,
+    ERROR_INCORRECT_JMPARG_FORMAT = 0x10
+
+};
+
+int textDtor(Text_info * text);
+int printText(Text_info * text);
+
+
+int strIcmp(char *s, char *t);
+int strChr(char *cs, char c);
+
+
+int textCtor(Text_info * text, const char * file_name);
+int compile(Text_info *input, Asm_info *output);
+
+int dumpAsm(Asm_info *output);
+int dumpCmd(int number_of_line, char * cmd, int argument, bool hasArg);
+int returnTextError(Text_info * text);
+
+int getArgs(Asm_info *output, const char * arg_beginning);
+int pushDmp(const char* reg_var, int argument);
+# 10 "ASM/src/funcs_ASM.cpp" 2
+# 72 "ASM/src/funcs_ASM.cpp"
+static const char* TXT_BORDER = "************************************************************";
+
+int returnTextError(Text_info * text)
+{
+# 87 "ASM/src/funcs_ASM.cpp"
+    return 0;
+}
+
+int textCtor(Text_info * text, const char * file_name)
+{
+
+    struct stat data = {};
+    stat(file_name, &data);
+    text->buf_length = data.st_size;
+
+    text->source_file = fopen(file_name, "r");
+
+    do{ if (returnTextError(text) != 0) { fprintf(stderr, "DUMP_CALLED: file: %s func: %s line: %d\n", "ASM/src/funcs_ASM.cpp", __FUNCTION__, 99); printText(text); } } while (0);
+
+    text->buf = (char *)calloc(text->buf_length + 2, sizeof(char));
+
+    do{ if (returnTextError(text) != 0) { fprintf(stderr, "DUMP_CALLED: file: %s func: %s line: %d\n", "ASM/src/funcs_ASM.cpp", __FUNCTION__, 103); printText(text); } } while (0);
+
+    fread(text->buf, sizeof(char), text->buf_length, text->source_file);
+
+    do{ if (returnTextError(text) != 0) { fprintf(stderr, "DUMP_CALLED: file: %s func: %s line: %d\n", "ASM/src/funcs_ASM.cpp", __FUNCTION__, 107); printText(text); } } while (0);
+
+    fclose(text->source_file);
+
+    do{ if (returnTextError(text) != 0) { fprintf(stderr, "DUMP_CALLED: file: %s func: %s line: %d\n", "ASM/src/funcs_ASM.cpp", __FUNCTION__, 111); printText(text); } } while (0);
+
+    text->buf[text->buf_length] = '\0';
+
+    do{ if (returnTextError(text) != 0) { fprintf(stderr, "DUMP_CALLED: file: %s func: %s line: %d\n", "ASM/src/funcs_ASM.cpp", __FUNCTION__, 115); printText(text); } } while (0);
+
+    text->number_of_lines = 1;
+    for (size_t counter = 0;counter <= text->buf_length; counter++)
+    {
+        if(text->buf[counter] == '\n')
+        {
+            text->buf[counter] = '\0';
+            text->number_of_lines++;
+        }
+
+    }
+
+    do{ if (returnTextError(text) != 0) { fprintf(stderr, "DUMP_CALLED: file: %s func: %s line: %d\n", "ASM/src/funcs_ASM.cpp", __FUNCTION__, 128); printText(text); } } while (0);
+    fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n", 129, "ASM/src/funcs_ASM.cpp", __FUNCTION__);
+    text->lines = (const char **)calloc(text->number_of_lines, sizeof(char *));
+    fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n", 131, "ASM/src/funcs_ASM.cpp", __FUNCTION__);
+    do{ if (returnTextError(text) != 0) { fprintf(stderr, "DUMP_CALLED: file: %s func: %s line: %d\n", "ASM/src/funcs_ASM.cpp", __FUNCTION__, 132); printText(text); } } while (0);
+
+    int buf_idx = 0;
+    text->lines[0] = text->buf;
+
+    do{ if (returnTextError(text) != 0) { fprintf(stderr, "DUMP_CALLED: file: %s func: %s line: %d\n", "ASM/src/funcs_ASM.cpp", __FUNCTION__, 137); printText(text); } } while (0);
+
+    for (int line = 1; line < text->number_of_lines; line++)
+    {
+        while (text->buf[buf_idx++] != '\0')
+            ;
+        text->lines[line] = (text->buf + buf_idx);
+
+    }
+
+    do{ if (returnTextError(text) != 0) { fprintf(stderr, "DUMP_CALLED: file: %s func: %s line: %d\n", "ASM/src/funcs_ASM.cpp", __FUNCTION__, 147); printText(text); } } while (0);
+
+    return 0;
+}
+
+int printText(Text_info * text)
+{
+    fprintf(stderr, "\n%s\n", TXT_BORDER);
+    fprintf(stderr, "  code_of_error = %d\n", text->code_of_error);
+    fprintf(stderr, "  buf_length = %d\n  number_of_lines = %d\n  buf: \n%s\n", text->buf_length, text->number_of_lines, text->buf);
+
+    if (text->number_of_lines != 0)
+        fprintf(stderr, "\tLines: \n");
+    for (int counter = 0; counter < text->number_of_lines; counter++)
+        printf("%s\n", text->lines[counter]);
+
+    fprintf(stderr, "\n%s\n", TXT_BORDER);
+
+    return 0;
+}
+
+int strIcmp(char *s, char *t)
+{
+
+    for(; tolower(*s) == tolower(*t); ++s, ++t)
+    {
+        if (*s == '\0')
+            return 0;
+
+        if(*s == '_')
+            break;
+
+    }
+
+    return s - t;
+
+}
+
+int strChr(char *cs, char c)
+{
+    assert(cs != nullptr);
+
+    int result = 0;
+
+    while (*cs != c && *cs != '\0')
+     {
+        ++cs;
+        result++;
+     }
+
+    if (*cs == '\0')
+        return NULL;
+
+    return result;
+
+}
+
+int pushDmp(const char* reg_var, int argument)
+{
+    if (argument != 0 || reg_var[0] != ' ')
+    {
+        fprintf(stderr, "%d\n", argument);
+
+    }else{
+
+        fprintf(stderr, "INVALID_ARGUMENT");
+
+    }
+
+
+}
+
+static int getFromLabels(Asm_info *output, int label_idx, int *argument)
+{
+    if (output->labels[label_idx] == 0)
+    {
+        return ERROR_ATTEMP_TO_USE_UNDEFINED_LABEL;
+
+    }else{
+
+        *argument = output->labels[label_idx];
+    }
+    return EXIT_SUCCESS;
+}
+
+static int writeLabelInFile(int number_of_line, char * cmd, Text_info *input, Asm_info *output, FILE * asm_listing)
+{
+
+    int len = strlen(cmd);
+    *(cmd + len) == '\0';
+    int label_idx = atoi(cmd);
+
+    int label_value = output->ip++;
+
+    if (output->labels[label_idx] = LABEL_POISON)
+    {
+        output->labels[label_idx] = label_value;
+
+    }else{
+
+        return ERROR_LABEL_IS_DEFINED_TWICE;
+
+    }
+
+    fprintf(asm_listing, "%04x\tlb\t  %02x\t%s\n",
+    output->ip, label_idx, input->lines[number_of_line]);
+
+    dumpCmd(number_of_line, "label", label_idx, 1);
+
+    return EXIT_SUCCESS;
+}
+
+int getArgs(Asm_info *output, const char * arg_beginning)
+{
+
+    char reg_var[228] = " ";
+    int argument = 0;
+    char test_for_ram = 0;
+    int shift;
+
+    switch(output->code[output->ip - 1])
+    {
+        case CMD_PUSH:
+
+            if (sscanf(arg_beginning, " %c", &test_for_ram) == 1)
+            {
+                if (test_for_ram == '[' && strchr(arg_beginning, ']') != nullptr)
+                {
+
+                    if (sscanf(strchr(arg_beginning, '[')+1, "%d", &argument) == 1)
+                    {
+                        fprintf(stderr, "[immed]\n");
+
+                        pushDmp(reg_var, argument);
+                        output->code[output->ip - 1] |= MEM_MASK;
+                        output->code[output->ip - 1] |= IMMED_MASK;
+                        output->code[output->ip++] = argument;
+                        break;
+
+                    }else if (sscanf(strchr(arg_beginning, '[')+1, "%s", &reg_var) == 1)
+                    {
+                        fprintf(stderr, "[reg]\n");
+
+                        reg_var[3] = '\0';
+                        fprintf(stderr, "%s\n", reg_var);
+
+                        do { if (strIcmp(reg_var, "rax") == 0) { argument = 1; }else if(strIcmp(reg_var, "rbx") == 0) { argument = 2; }else if(strIcmp(reg_var, "rcx") == 0) { argument = 3; }else if(strIcmp(reg_var, "rdx") == 0) { argument = 4; } } while(0);
+                        pushDmp(reg_var, argument);
+
+                        output->code[output->ip - 1] |= MEM_MASK;
+                        output->code[output->ip - 1] |= REG_MASK;
+                        output->code[output->ip++] = argument;
+                        break;
+
+                    }
+
+                }
+                }
+
+
+                if (sscanf(arg_beginning, "%d", &argument) == 1)
+                {
+                    fprintf(stderr, "immed\n");
+                    pushDmp(reg_var, argument);
+                    output->code[output->ip - 1] |= IMMED_MASK;
+                    output->code[output->ip++] = argument;
+                    break;
+
+                }else {
+
+                    fprintf(stderr, "reg\n");
+
+                    sscanf(arg_beginning, "%n%s", &shift, &reg_var);
+
+                    reg_var[3] = '\0';
+                    fprintf(stderr, "%s\n", reg_var);
+
+                    do { if (strIcmp(reg_var, "rax") == 0) { argument = 1; }else if(strIcmp(reg_var, "rbx") == 0) { argument = 2; }else if(strIcmp(reg_var, "rcx") == 0) { argument = 3; }else if(strIcmp(reg_var, "rdx") == 0) { argument = 4; } } while(0);
+                    pushDmp(reg_var, argument);
+
+                    output->code[output->ip - 1] |= REG_MASK;
+                    output->code[output->ip++] = argument;
+                    break;
+
+                }
+
+
+
+            fprintf(stderr, "GET HIGH");
+            break;
+
+        case CMD_JMP:
+        case CMD_JB:
+        case CMD_JBE:
+        case CMD_JA:
+        case CMD_JAE:
+        case CMD_JE:
+        case CMD_JNE:
+
+                if (sscanf(arg_beginning, " :%d", &argument) == 1)
+                {
+                    output->DNNTMSP *= 0;
+                    int line_idx = argument;
+                    getFromLabels(output, line_idx, &argument);
+
+                }else {
+
+                    sscanf(arg_beginning, " %d", &argument);
+
+                }
+
+                output->code[output->ip++] = argument;
+                break;
+
+        default:
+                fprintf(stderr, "GET HIGH");
+                break;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+int compile(Text_info *input, Asm_info *output)
+{
+
+    int DNNTMSP = true;
+
+    FILE * asm_listing = fopen("listing.asm", "w");
+    fprintf(asm_listing, "adr \tcmd   arg \tsource\n");
+
+    char * cmd = (char *)calloc(1, sizeof(char *));
+
+    do {
+
+        output->ip = 0;
+        output->number_of_comands = 0;
+        int shift = 0;
+
+        for (int line = 0; line < input->number_of_lines; line++)
+        {
+
+            sscanf(input->lines[line], "%s%n", cmd, &shift);
+            int len = strlen(cmd);
+
+
+# 1 "ASM/src/../../inc/comands.h" 1
+if (strIcmp(cmd, "PUSH") == 0) { output->number_of_comands++; output->code[output->ip++] = 1; if (1) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 1, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, 1); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, 1); } }else
+
+if (strIcmp(cmd, "ADD") == 0) { output->number_of_comands++; output->code[output->ip++] = 2; if (0) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 2, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, 0); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, 0); } }else
+
+if (strIcmp(cmd, "SUB") == 0) { output->number_of_comands++; output->code[output->ip++] = 3; if (0) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 3, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, 0); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, 0); } }else
+
+if (strIcmp(cmd, "MUL") == 0) { output->number_of_comands++; output->code[output->ip++] = 4; if (0) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 4, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, 0); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, 0); } }else
+
+if (strIcmp(cmd, "DIV") == 0) { output->number_of_comands++; output->code[output->ip++] = 5; if (0) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 5, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, 0); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, 0); } }else
+
+if (strIcmp(cmd, "OUT") == 0) { output->number_of_comands++; output->code[output->ip++] = 6; if (0) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 6, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, 0); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, 0); } }else
+
+if (strIcmp(cmd, "DUP") == 0) { output->number_of_comands++; output->code[output->ip++] = 7; if (0) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 7, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, 0); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, 0); } }else
+
+if (strIcmp(cmd, "IN") == 0) { output->number_of_comands++; output->code[output->ip++] = 8; if ({ }) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 8, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, { }); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, { }); } }else
+
+if (strIcmp(cmd, "DMP") == 0) { output->number_of_comands++; output->code[output->ip++] = 9; if ({ }) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 9, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, { }); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, { }); } }else
+
+if (strIcmp(cmd, "JMP") == 0) { output->number_of_comands++; output->code[output->ip++] = 10; if ({ }) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 10, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, { }); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, { }); } }else
+
+if (strIcmp(cmd, "JB") == 0) { output->number_of_comands++; output->code[output->ip++] = 11; if ({ }) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 11, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, { }); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, { }); } }else
+
+if (strIcmp(cmd, "JBE") == 0) { output->number_of_comands++; output->code[output->ip++] = 12; if ({ }) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 12, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, { }); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, { }); } }else
+
+if (strIcmp(cmd, "JA") == 0) { output->number_of_comands++; output->code[output->ip++] = 13; if ({ }) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 13, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, { }); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, { }); } }else
+
+if (strIcmp(cmd, "JAE") == 0) { output->number_of_comands++; output->code[output->ip++] = 14; if ({ }) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 14, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, { }); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, { }); } }else
+
+if (strIcmp(cmd, "JE") == 0) { output->number_of_comands++; output->code[output->ip++] = 15; if ({ }) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 15, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, { }); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, { }); } }else
+
+if (strIcmp(cmd, "JNE") == 0) { output->number_of_comands++; output->code[output->ip++] = 16; if ({ }) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 16, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, { }); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, { }); } }else
+
+if (strIcmp(cmd, "HLT") == 0) { output->number_of_comands++; output->code[output->ip++] = 0; if ({ }) { getArgs(output, input->lines[line]+ shift); fprintf(asm_listing, "%04x\t%02x\t  %02x\t%s\n", output->ip - 1, 0, output->code[output->ip - 2], input->lines[line]); dumpCmd(line, cmd, 1, { }); }else{ fprintf(asm_listing, "%04x\t%02x  \t\t%s\n", output->ip, output->code[output->ip -1], input->lines[line]); dumpCmd(line, cmd, 0, { }); } }else
+# 393 "ASM/src/funcs_ASM.cpp" 2
+
+            if ((*(cmd + len) == ':') == 0){
+
+                writeLabelInFile(line, cmd, input, output, asm_listing);
+
+            }
+
+            *cmd = -1;
+
+    }
+
+    } while(0);
+
+    for (int counter = 0; counter < LABELS_SIZE; counter++)
+        fprintf(stderr, "%d\t", output->labels[counter]);
+
+    free(cmd);
+
+    fclose(asm_listing);
+
+    return EXIT_SUCCESS;
+}
+
+int dumpCmd(int number_of_line, char * cmd, int argument, bool hasArg)
+{
+    switch(hasArg)
+    {
+       case true: fprintf(stderr, "line - %d comand - %s argument - %d\n", number_of_line, cmd, argument);
+                break;
+       case false: fprintf(stderr, "line - %d comand - %s\n", number_of_line, cmd);
+                break;
+       default: fprintf(stderr, "ERROR\n");
+                break;
+    }
+    return 0;
+
+}
+
+int dumpAsm(Asm_info *output, const char *name_of_file, const char *name_of_func, int number_of_line)
+{
+
+   fprintf(stderr, "%s at %s(%d)\n", name_of_func, name_of_file, number_of_line);
+
+};
