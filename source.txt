@@ -1,6 +1,14 @@
 push 1
-push 2
+dup
 add
+dup
+mul
+push 3
+ja :1
+hlt
 out
 out
+out
+1:
+push 1
 hlt

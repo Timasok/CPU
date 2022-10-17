@@ -21,17 +21,14 @@
 #define DBG
 #endif
 
-
-FILE *err_file = fopen("../../err_file.txt","w");
+FILE * log_file = fopen("log_file.txt", "w"); 
 
 int main(int argc, const char* argv[])
 {
-
-    setvbuf(err_file, NULL, _IONBF, 0);
+     
+    setvbuf(log_file, NULL, _IONBF, 0);
 
     FILE * asm_source = fopen("source.asm", "rb");
-
-    FILE * log_file = fopen("log_file.txt", "w");        
     
     CPU_info cpu;
     CPU_Ctor(&cpu, asm_source);

@@ -11,7 +11,7 @@ void stack_Ctor(Stack *stk, size_t capacity, const char * name_of_var, const cha
 void stackDtor(Stack *stk);
 
 void stackPush(Stack *stk, elem_t element);
-elem_t stackPop(Stack *stk, elem_t * element);
+int stackPop(Stack *stk, elem_t * element);
 void stackResize(Stack * stk, size_t new_capacity);
 
 void printStack(Stack *stk);

@@ -1,0 +1,267 @@
+# 0 "CPU/src/funcs_CPU.cpp"
+# 0 "<built-in>"
+# 0 "<command-line>"
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+# 0 "<command-line>" 2
+# 1 "CPU/src/funcs_CPU.cpp"
+# 23 "CPU/src/funcs_CPU.cpp"
+const int REG_POISON = -1;
+
+extern FILE * log_file;
+# 111 "CPU/src/funcs_CPU.cpp"
+int CPU_Ctor(CPU_info * cpu, FILE * asm_source)
+{
+    fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n", 113, "CPU/src/funcs_CPU.cpp", __FUNCTION__);
+    fread(&cpu->signature, sizeof(int), 1, asm_source);
+
+
+
+
+    fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n", 119, "CPU/src/funcs_CPU.cpp", __FUNCTION__);
+    fread(&cpu->quantity, sizeof(int), 1, asm_source);
+    fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n", 121, "CPU/src/funcs_CPU.cpp", __FUNCTION__);
+    fread(&cpu->number_of_comands, sizeof(int), 1, asm_source);
+    fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n", 123, "CPU/src/funcs_CPU.cpp", __FUNCTION__);
+    cpu->code = (int *)calloc(cpu->quantity, sizeof(int));
+    fread(cpu->code, sizeof(int), cpu->quantity, asm_source);
+
+    return EXIT_SUCCESS;
+}
+
+int process(CPU_info * cpu, Stack * cpu_stack)
+{
+
+    cpu->ip = 0;
+    stackCtor(* cpu_stack, cpu->number_of_comands);
+
+    while (cpu->ip < cpu->quantity)
+    {
+        int num_of_comand = cpu->code[cpu->ip];
+        elem_t first_popped = 0, second_popped = 0;
+        elem_t out = 0;
+
+        fprintf(stderr,"NUMBER OF PROCESSING COMAND %d ip - %d \n", num_of_comand, cpu->ip);
+        switch(num_of_comand)
+        {
+# 1 "CPU/src/../../inc/comands.h" 1
+case 1: cpu->ip++; { }; if (!(1 == CMD_DMP || 1 == CMD_HLT || 1 == CMD_IN || 1 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+case 2: cpu->ip++; { }; if (!(2 == CMD_DMP || 2 == CMD_HLT || 2 == CMD_IN || 2 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+case 3: cpu->ip++; { do { if (stackPop(cpu_stack, &first_popped) == EXIT_FAILURE) { break; } } while (0); do { if (stackPop(cpu_stack, &second_popped) == EXIT_FAILURE) { break; } } while (0); do { stackPush(cpu_stack, second_popped + second_popped); } while (0); fprintf(stderr, "%d %s %d\n", second_popped, "+", first_popped); }; if (!(3 == CMD_DMP || 3 == CMD_HLT || 3 == CMD_IN || 3 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+
+
+
+
+
+
+case 4: cpu->ip++; { do { if (stackPop(cpu_stack, &first_popped) == EXIT_FAILURE) { break; } } while (0); do { if (stackPop(cpu_stack, &second_popped) == EXIT_FAILURE) { break; } } while (0); do { stackPush(cpu_stack, second_popped - second_popped); } while (0); fprintf(stderr, "%d %s %d\n", second_popped, "-", first_popped); }; if (!(4 == CMD_DMP || 4 == CMD_HLT || 4 == CMD_IN || 4 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+
+
+
+
+
+
+case 5: cpu->ip++; { do { if (stackPop(cpu_stack, &first_popped) == EXIT_FAILURE) { break; } } while (0); do { if (stackPop(cpu_stack, &second_popped) == EXIT_FAILURE) { break; } } while (0); do { stackPush(cpu_stack, second_popped * second_popped); } while (0); fprintf(stderr, "%d %s %d\n", second_popped, "*", first_popped); }; if (!(5 == CMD_DMP || 5 == CMD_HLT || 5 == CMD_IN || 5 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+
+
+
+
+
+
+case 6: cpu->ip++; { do { if (stackPop(cpu_stack, &first_popped) == EXIT_FAILURE) { break; } } while (0); do { if (stackPop(cpu_stack, &second_popped) == EXIT_FAILURE) { break; } } while (0); do { stackPush(cpu_stack, second_popped / second_popped); } while (0); fprintf(stderr, "%d %s %d\n", second_popped, "/", first_popped); }; if (!(6 == CMD_DMP || 6 == CMD_HLT || 6 == CMD_IN || 6 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+# 38 "CPU/src/../../inc/comands.h"
+case 7: cpu->ip++; { do { if (stackPop(cpu_stack, &out) == EXIT_FAILURE) { break; } } while (0); do { fprintf(log_file, "OUT: = %d", *&out); } while (0); }; if (!(7 == CMD_DMP || 7 == CMD_HLT || 7 == CMD_IN || 7 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+
+
+
+
+
+case 8: cpu->ip++; { elem_t tmp; do { if (stackPop(cpu_stack, &tmp) == EXIT_FAILURE) { break; } } while (0); do { stackPush(cpu_stack, tmp); } while (0); do { stackPush(cpu_stack, tmp); } while (0); }; if (!(8 == CMD_DMP || 8 == CMD_HLT || 8 == CMD_IN || 8 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+# 54 "CPU/src/../../inc/comands.h"
+case 9: cpu->ip++; { }; if (!(9 == CMD_DMP || 9 == CMD_HLT || 9 == CMD_IN || 9 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+case 10: cpu->ip++; { }; if (!(10 == CMD_DMP || 10 == CMD_HLT || 10 == CMD_IN || 10 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+case 11: cpu->ip++; { do { if (cpu->code[cpu->ip] < 0 || cpu->code[cpu->ip] >= cpu->quantity) fprintf(stderr, "LABEL POINTS OUTDOORS ip = %d", cpu->ip); cpu->ip = cpu->code[cpu->ip++]; } while (0); }; if (!(11 == CMD_DMP || 11 == CMD_HLT || 11 == CMD_IN || 11 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+
+
+
+case 12: cpu->ip++; { do { if (stackPop(cpu_stack, &first_popped) == EXIT_FAILURE) { break; } } while (0); do { if (stackPop(cpu_stack, &second_popped) == EXIT_FAILURE) { break; } } while (0); do { if (second_popped < second_popped){ do { if (cpu->code[cpu->ip] < 0 || cpu->code[cpu->ip] >= cpu->quantity) fprintf(stderr, "LABEL POINTS OUTDOORS ip = %d", cpu->ip); cpu->ip = cpu->code[cpu->ip++]; } while (0); }else { cpu->ip++; } } while (0); }; if (!(12 == CMD_DMP || 12 == CMD_HLT || 12 == CMD_IN || 12 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+
+
+
+
+
+
+case 13: cpu->ip++; { do { if (stackPop(cpu_stack, &first_popped) == EXIT_FAILURE) { break; } } while (0); do { if (stackPop(cpu_stack, &second_popped) == EXIT_FAILURE) { break; } } while (0); do { if (second_popped <= second_popped){ do { if (cpu->code[cpu->ip] < 0 || cpu->code[cpu->ip] >= cpu->quantity) fprintf(stderr, "LABEL POINTS OUTDOORS ip = %d", cpu->ip); cpu->ip = cpu->code[cpu->ip++]; } while (0); }else { cpu->ip++; } } while (0); }; if (!(13 == CMD_DMP || 13 == CMD_HLT || 13 == CMD_IN || 13 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+
+
+
+
+
+case 14: cpu->ip++; { do { if (stackPop(cpu_stack, &first_popped) == EXIT_FAILURE) { break; } } while (0); do { if (stackPop(cpu_stack, &second_popped) == EXIT_FAILURE) { break; } } while (0); do { if (second_popped > second_popped){ do { if (cpu->code[cpu->ip] < 0 || cpu->code[cpu->ip] >= cpu->quantity) fprintf(stderr, "LABEL POINTS OUTDOORS ip = %d", cpu->ip); cpu->ip = cpu->code[cpu->ip++]; } while (0); }else { cpu->ip++; } } while (0); }; if (!(14 == CMD_DMP || 14 == CMD_HLT || 14 == CMD_IN || 14 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+
+
+
+
+
+case 15: cpu->ip++; { do { if (stackPop(cpu_stack, &first_popped) == EXIT_FAILURE) { break; } } while (0); do { if (stackPop(cpu_stack, &second_popped) == EXIT_FAILURE) { break; } } while (0); do { if (second_popped >= second_popped){ do { if (cpu->code[cpu->ip] < 0 || cpu->code[cpu->ip] >= cpu->quantity) fprintf(stderr, "LABEL POINTS OUTDOORS ip = %d", cpu->ip); cpu->ip = cpu->code[cpu->ip++]; } while (0); }else { cpu->ip++; } } while (0); }; if (!(15 == CMD_DMP || 15 == CMD_HLT || 15 == CMD_IN || 15 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+
+
+
+
+
+case 16: cpu->ip++; { do { if (stackPop(cpu_stack, &first_popped) == EXIT_FAILURE) { break; } } while (0); do { if (stackPop(cpu_stack, &second_popped) == EXIT_FAILURE) { break; } } while (0); do { if (second_popped == second_popped){ do { if (cpu->code[cpu->ip] < 0 || cpu->code[cpu->ip] >= cpu->quantity) fprintf(stderr, "LABEL POINTS OUTDOORS ip = %d", cpu->ip); cpu->ip = cpu->code[cpu->ip++]; } while (0); }else { cpu->ip++; } } while (0); }; if (!(16 == CMD_DMP || 16 == CMD_HLT || 16 == CMD_IN || 16 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+
+
+
+
+
+case 17: cpu->ip++; { do { if (stackPop(cpu_stack, &first_popped) == EXIT_FAILURE) { break; } } while (0); do { if (stackPop(cpu_stack, &second_popped) == EXIT_FAILURE) { break; } } while (0); do { if (second_popped != second_popped){ do { if (cpu->code[cpu->ip] < 0 || cpu->code[cpu->ip] >= cpu->quantity) fprintf(stderr, "LABEL POINTS OUTDOORS ip = %d", cpu->ip); cpu->ip = cpu->code[cpu->ip++]; } while (0); }else { cpu->ip++; } } while (0); }; if (!(17 == CMD_DMP || 17 == CMD_HLT || 17 == CMD_IN || 17 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+
+
+
+
+
+case 18: cpu->ip++; { }; if (!(18 == CMD_DMP || 18 == CMD_HLT || 18 == CMD_IN || 18 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+
+case 0: cpu->ip++; { }; if (!(0 == CMD_DMP || 0 == CMD_HLT || 0 == CMD_IN || 0 == CMD_JMP)) { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 1); }else { dump_CMD_CPU(cpu->ip - 1, cpu->code[cpu->ip - 1], cpu_stack, 0); } break;
+# 146 "CPU/src/funcs_CPU.cpp" 2
+
+            default:
+                if((num_of_comand & CMD_PUSH) || (num_of_comand & CMD_POP))
+                {
+
+                    elem_t arg = 0;
+                    int reg_idx = REG_POISON;
+
+                    if (num_of_comand & IMMED_MASK)
+                    {
+                        cpu->ip++;
+                        arg = cpu->code[cpu->ip++];
+
+                    }else if(num_of_comand & REG_MASK)
+                    {
+                        cpu->ip++;
+                        int reg_idx = cpu->code[cpu->ip++];
+                        arg = cpu->Reg[reg_idx];
+
+                    }else{
+                        cpu->ip++;
+                        fprintf(stderr, "Error: WRONG CMD MASK: -line: %d file: %s func: %s\n", 167, "CPU/src/funcs_CPU.cpp", __FUNCTION__);
+                        dump_CMD_CPU(cpu->ip - 1, num_of_comand, cpu_stack, 0);
+                        continue;
+                    }
+
+                    if(num_of_comand & MEM_MASK)
+                    {
+                        if (num_of_comand & CMD_PUSH)
+                        {
+
+
+                            if (cpu->RAM[arg] != NULL)
+                            {
+                                stackPush(cpu_stack, cpu->RAM[arg]);
+                                fprintf(stderr, "push [%d] \n", arg);
+
+                            }else
+                            {
+                                fprintf(stderr, "RAM[%d] is empty\n", arg);
+                                dump_CMD_CPU(cpu->ip - 1, num_of_comand, cpu_stack, 0);
+                                break;
+
+                            }
+
+                        }else if (num_of_comand & CMD_POP)
+                        {
+                            stackPop(cpu_stack, &cpu->RAM[arg]);
+                            fprintf(stderr, "pop [%d]\n", arg);
+
+                        }
+
+                        dump_CMD_CPU(cpu->ip - 1, num_of_comand, cpu_stack, 1);
+
+                    }else
+                    {
+                        if (num_of_comand & CMD_PUSH)
+                        {
+                            stackPush(cpu_stack, arg);
+                            fprintf(stderr, "push value %d\n", arg);
+                            dump_CMD_CPU(cpu->ip - 1, num_of_comand, cpu_stack, 1);
+
+                        }else if (num_of_comand & CMD_POP)
+                        {
+                            if (reg_idx != REG_POISON)
+                            {
+                                stackPop(cpu_stack, &cpu->Reg[reg_idx]);
+                                fprintf(stderr, "pop to REG[%d]\n", reg_idx);
+                                dump_CMD_CPU(cpu->ip - 1, num_of_comand, cpu_stack, 1);
+                            }
+
+                            fprintf(stderr, "Error: CANNOT POP into IMMED  -line: %d file: %s func: %s\n", 217, "CPU/src/funcs_CPU.cpp", __FUNCTION__);
+                            break;
+
+                        }
+
+                    }
+
+                }
+                break;
+        }
+
+    }
+
+    return EXIT_SUCCESS;
+}
+
+
+int dump_CPU(CPU_info *cpu, FILE * log_file)
+{
+    fprintf(log_file, "\nSIGNATURE: %s\n"
+                        "QUANTITY:  %d\n"
+                        "NUMBER OF COMANDS: %d\n"
+                      ,&(cpu->signature), cpu->quantity, cpu->number_of_comands);
+
+    for (int ip = 0; ip < cpu->quantity; ip++)
+        fprintf(log_file, "%d\t", cpu->code[ip]);
+
+    fprintf(log_file, "\n");
+
+}
+
+int dump_CMD_CPU(int ip, int CMD, Stack * cpu_stack, bool stackChanged)
+{
+    fprintf(stderr, "\nComand - ");
+    printBits(CMD);
+    fprintf(stderr, "\tip - %d\n", ip);
+
+    if (stackChanged)
+    {
+        fprintf(stderr, "STACK CHANGED!\n");
+        printStack(cpu_stack);
+    }
+
+}
+
+int printBits(int x)
+{
+    do{
+        fprintf(stderr, "%d", x%2);
+        x /= 2;
+
+    }while(x);
+
+    return EXIT_SUCCESS;
+}

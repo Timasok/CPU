@@ -4,7 +4,5 @@
 int main()
 {
     system("./assembler");
-    
-
-
+    system("./cpu");
 }

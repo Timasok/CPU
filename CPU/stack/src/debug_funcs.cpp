@@ -112,7 +112,7 @@ void printStack(Stack *stk)
    fprintf(stderr, "capacity = %d\n", stk->capacity);
    fprintf(stderr, "data[%p]\n" , stk->data); 
    fprintf(stderr, "code_of_error = %d\n", stk->code_of_error);
-   fprintf(stderr, "\t}\n");
+   fprintf(stderr, "{\n\t{\n");
 
    int counter = stk->capacity;
    while(--counter >= 0)

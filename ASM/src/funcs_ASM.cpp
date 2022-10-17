@@ -267,6 +267,7 @@ int getArgs(Asm_info *output, const char * arg_beginning)
     switch(output->code[output->ip - 1])
     {
         case CMD_PUSH:
+        case CMD_POP:
 
             if (sscanf(arg_beginning, " %c", &test_for_ram) == 1)
             {

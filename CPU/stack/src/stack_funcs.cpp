@@ -103,14 +103,24 @@ void stackPush(Stack *stk, elem_t element)
 
 }
 
-void stackPop(Stack *stk, elem_t * element) 
+void stackDtor(Stack *stk)
+{
+    ASSERT_OK(stk);
+
+    fillWithPoison(stk, stk->size, stk->capacity);
+    free((void *)stk->data);
+
+}
+
+int stackPop(Stack *stk, elem_t * element) 
 {
     ASSERT_OK(stk);
 
     if (stk->size == 0)
     {
         fprintf(stderr,"You attained the end of stack\n");
-        return ;
+        stackDtor(stk);
+        return EXIT_FAILURE;
     }
 
     if (stk->size * STACK_RESIZE_IF_POP < stk->capacity)
@@ -124,15 +134,8 @@ void stackPop(Stack *stk, elem_t * element)
 
     ASSERT_OK(stk);
 
+    return EXIT_SUCCESS;
 }
 
-void stackDtor(Stack *stk)
-{
-    ASSERT_OK(stk);
-
-    fillWithPoison(stk, stk->size, stk->capacity);
-    free((void *)stk->data);
-
-}
 
 #undef ASSERT_OK(stkPtr)
