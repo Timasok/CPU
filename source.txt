@@ -1,14 +1,8 @@
-push 1
-dup
+push [12]
+pop rdx
 add
-dup
-mul
-push 3
-ja :1
-hlt
+sub
+push 18
+div
 out
-out
-out
-1:
-push 1
 hlt

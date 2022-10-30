@@ -6,44 +6,37 @@
 #include <stdio.h>
 #include <sys/stat.h>
 
-//todo use -I flag
-#include "../include/funcs_CPU.h"
-
-//todo we need to add log file in CPU struct
+// #include "funcs_CPU.h"
+#include "debug_CPU.h"
 
 #define DEBUG_MODE
 
 #ifdef DEBUG_MODE
-#define DBG fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n",            \
+#define DBG_OUT fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n",            \
                                                 __LINE__, __FILE__, __FUNCTION__)
 #endif
 #ifndef DEBUG_MODE
-#define DBG
+#define DBG_OUT
 #endif
-
-FILE * log_file = fopen("log_file.txt", "w"); 
 
 int main(int argc, const char* argv[])
 {
-     
-    setvbuf(log_file, NULL, _IONBF, 0);
-
-    FILE * asm_source = fopen("source.asm", "rb");
     
+    FILE * asm_source = fopen("a.code", "rb");
+
     CPU_info cpu;
     CPU_Ctor(&cpu, asm_source);
-    dump_CPU(&cpu, log_file);
+    dump_CPU(&cpu);
+    DBG_OUT;
 
-    Stack cpu_stack = {};
-    DBG;
-
-    process(&cpu, &cpu_stack);
-    // printStack(&cpu_stack);
-    DBG;
-    free(cpu.code);
+    process(&cpu);
+    // printStack(&cpu->stack);
 
     fcloseall();
+    CPU_Dtor(&cpu);
+    
+
     return EXIT_SUCCESS;
 }
 
-#undef DBG
+#undef DBG_OUT

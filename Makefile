@@ -1,21 +1,20 @@
-CC=g++
-CFLAGS=-c -Wall
-SRC_DIR = ASM/src/
-OBJ_DIR = ASM/obj/
+ASM_SRC_DIR = ASM/src/
+STK_SRC_DIR = lib/stack/src/
+CPU_SRC_DIR = CPU/src/
+LIB_DIR = lib/
 
-all: ASM
+I_FLAG := -I./ASM/include/ -I./CPU/include/ -I./lib/stack/include/ -I./inc/ -I./lib/
 
-ASM: $(OBJ_DIR)main.o $(OBJ_DIR)funcs_ASM.o
-	@$(CC) $(OBJ_DIR)main.o $(OBJ_DIR)funcs_ASM.o -o assembler
+CC := g++
+CFLAGS := $(I_FLAG)
 
-$(OBJ_DIR)main.o: $(SRC_DIR)main.cpp 
-	@$(CC) $(SRC_DIR)main.cpp $(CFLAGS) -o $(OBJ_DIR)main.o
+SOURCES_ASM := $(ASM_SRC_DIR)main_ASM.cpp $(ASM_SRC_DIR)funcs_ASM.cpp $(ASM_SRC_DIR)debug_ASM.cpp $(ASM_SRC_DIR)inout_ASM.cpp
+SOURCES_CPU := $(CPU_SRC_DIR)main_CPU.cpp $(CPU_SRC_DIR)funcs_CPU.cpp $(CPU_SRC_DIR)debug_CPU.cpp $(STK_SRC_DIR)stack_funcs.cpp $(STK_SRC_DIR)debug_funcs.cpp
+SOURCES_TXT_LIB := $(LIB_DIR)text_funcs.cpp
 
-$(OBJ_DIR)funcs_ASM.o: $(SRC_DIR)funcs_ASM.cpp 
-	@$(CC) $(SRC_DIR)funcs_ASM.cpp 	$(CFLAGS) -o $(OBJ_DIR)funcs_ASM.o
+EXECUTABLE_ASM := assembler
+EXECUTABLE_CPU := cpu
 
-mkdir:
-	mkdir $(OBJ_DIR) -p
-
-clean:
-	rm $(OBJ_DIR)*.o *.save stack
+all :
+	$(CC) $(SOURCES_TXT_LIB) $(SOURCES_ASM) $(CFLAGS) -o $(EXECUTABLE_ASM)
+	$(CC) $(SOURCES_CPU) $(CFLAGS) -o $(EXECUTABLE_CPU)

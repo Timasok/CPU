@@ -1,0 +1,9 @@
+adr 	cmd   arg 	source
+0000	01	  a1	push [12]
+0002	02	  42	pop rdx
+0004	03  		add
+0005	04  		sub
+0006	01	  21	push 18
+0008	06  		div
+0009	07  		out
+000a	00  		hlt

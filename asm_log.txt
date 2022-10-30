@@ -1,0 +1,36 @@
+asmCtor at ASM/src/inout_ASM.cpp(30)
+CODE OF ERROR: 1057
+asmCtor at ASM/src/inout_ASM.cpp(46)
+CODE OF ERROR: 1057
+compile at ASM/src/funcs_ASM.cpp(53)
+CODE OF ERROR: 1057
+getArgs at ASM/src/funcs_ASM.cpp(182)
+CODE OF ERROR: 1057
+ARGUMENT: 12 REGISTER: 0 MEMORY: 1
+getArgs at ASM/src/funcs_ASM.cpp(198)
+CODE OF ERROR: 1057
+line - 0 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(182)
+CODE OF ERROR: 1057
+ARGUMENT: 4 REGISTER: 1 MEMORY: 0
+ARGUMENT: 4 REGISTER: 1 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(198)
+CODE OF ERROR: 1057
+line - 1 comand - pop argument - 1
+line - 2 comand - add
+line - 3 comand - sub
+getArgs at ASM/src/funcs_ASM.cpp(182)
+CODE OF ERROR: 1057
+ARGUMENT: 18 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(198)
+CODE OF ERROR: 1057
+line - 4 comand - push argument - 1
+line - 5 comand - div
+line - 6 comand - out
+line - 7 comand - hlt
+compile at ASM/src/funcs_ASM.cpp(98)
+CODE OF ERROR: 1057
+writeAssemblerInFile at ASM/src/inout_ASM.cpp(52)
+CODE OF ERROR: 1057
+asmDtor at ASM/src/inout_ASM.cpp(89)
+CODE OF ERROR: 1057
