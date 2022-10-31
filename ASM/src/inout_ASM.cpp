@@ -19,16 +19,11 @@
 //        }                                                                    \
 //    } while (0)
 
-
-#define DBG printf("Compiled nicely -line: %d file: %s func: %s\n",                 \
-                                                __LINE__, __FILE__, __FUNCTION__)
-
-
 int asmCtor(Asm_info *executable, char * asm_name, int maximum_quantity)
 {
-    DBG;
+    DBG_OUT;
     ASSERT_OK(executable);
-    DBG;
+    DBG_OUT;
     executable->ip = 0;
     executable->number_of_comands = 0;
     executable->asm_file = fopen(asm_name, "wb");
@@ -94,4 +89,3 @@ int asmDtor(Asm_info *executable)
 }
 
 #undef ASSERT_OK
-#undef DBG

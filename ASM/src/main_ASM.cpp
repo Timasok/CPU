@@ -1,11 +1,12 @@
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "funcs_ASM.h"
 #include "inout_ASM.h"
+#include "debug_ASM.h"
 
-#define DBG printf("Compiled nicely -line: %d file: %s func: %s\n",                 \
-                                                __LINE__, __FILE__, __FUNCTION__)
+FILE *text_logs;
 
 int main(int argc, char ** argv)
 {
@@ -14,6 +15,7 @@ int main(int argc, char ** argv)
 
     char asm_reserve[] = "auf.txt";
     FILE * txt_reserve = fopen(asm_reserve, "w+");
+    openAsmLogs();
 
     if (argc == 3)
     {
@@ -26,11 +28,11 @@ int main(int argc, char ** argv)
     printText(&source);
 
     Asm_info executable = {};
-    DBG;
+    DBG_OUT;
     asmCtor(&executable, asm_name, 2 * (source.number_of_lines + 1));
-    DBG;
 
-    printf("BUFFER SIZE: %d\n", 2 * (source.number_of_lines + 1));
+    DBG_OUT;
+    assert(executable.asm_log != NULL);
     compile(&source, &executable);
     if (executable.compile_once == 0)
     {
@@ -38,17 +40,17 @@ int main(int argc, char ** argv)
         compile(&source, &executable);        
     }
 
-    DBG;
+    DBG_OUT;
 
     for (int counter = 0; counter < executable.ip; counter++)
-        fprintf(stderr, "%d\t", executable.code[counter]);
-    DBG;
+        fprintf(executable.asm_log, "%d\t", executable.code[counter]);
+    DBG_OUT;
     writeAssemblerInFile(&executable, txt_reserve);
-    DBG;
+    DBG_OUT;
     asmDtor(&executable);
-    DBG;
+    DBG_OUT;
+
+    closeAsmLogs();
 
     return EXIT_SUCCESS;
 }
-
-#undef DBG

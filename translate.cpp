@@ -13,9 +13,14 @@ int main()
     }while(input[counter++] != '\n');
     input[counter] = '\0';
 
+    for (int idx = counter - 1; idx >= 0; idx--)
+    {
+        fprintf(translated_file, "push %d\n", input[idx]);
+    }
+
     for (int idx = 0; idx < counter; idx++)
     {
-        fprintf(translated_file, "push [%d]\n", input[idx]);
+        fprintf(translated_file, "push [%d]\n", idx);
     }
 
     fclose(translated_file);

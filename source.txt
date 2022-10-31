@@ -1,8 +1,11 @@
-push [12]
-pop rdx
-add
-sub
-push 18
-div
-out
+push 2
+push 5
+push 1
+jbe :push_next
+
+push 228
+
+push_next:
+
+out 
 hlt

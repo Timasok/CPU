@@ -1,20 +1,19 @@
 #include "debug_ASM.h"
 
-extern FILE * asm_log = fopen("asm_log.txt", "w+");
-
 int openAsmLogs()
 {
-//     asm_log = fopen("asm_log.txt", "w+");;
+    text_logs = fopen("text_log.txt", "w+");
+    return 0;
     return EXIT_SUCCESS;
 }
 
 int closeAsmLogs()
 {
-    fclose(asm_log);
+    fclose(text_logs);
     return EXIT_SUCCESS;
 }
 
-int pushDmp(int argument, bool isRegister, bool isMemory)
+int pushDmp(FILE *asm_log, const int argument, const bool isRegister, const bool isMemory)
 {
     switch (isRegister)
     {
@@ -37,7 +36,7 @@ int pushDmp(int argument, bool isRegister, bool isMemory)
 
 }
 
-int dumpCmd(int number_of_line, char * cmd, int argument, bool hasArg) // TODO mark argumens as "const" everywhere
+int dumpCmd(FILE *asm_log, const int number_of_line, const char * cmd, const int argument, const bool hasArg)
 {
     switch(hasArg)
     {
@@ -55,13 +54,13 @@ int dumpCmd(int number_of_line, char * cmd, int argument, bool hasArg) // TODO m
 int dumpAsm(Asm_info *output, const char *name_of_file, const char *name_of_func, int number_of_line)
 {
    
-    fprintf(asm_log, "%s at %s(%d)\n", name_of_func, name_of_file, number_of_line);
-    strAsmError(output->code_of_error);
+    fprintf(output->asm_log, "%s at %s(%d)\n", name_of_func, name_of_file, number_of_line);
+    strAsmError(output->asm_log, output->code_of_error);
 
     return EXIT_SUCCESS;
 }
 
-int strAsmError(int code_of_error)
+int strAsmError(FILE *asm_log, int code_of_error)
 {
     fprintf(asm_log, "CODE OF ERROR: %d\n", code_of_error);
     
@@ -73,7 +72,7 @@ int returnAsmError(Asm_info *output)
     output->code_of_error |= ((output->asm_file == NULL) ? ASM_ERROR_INVALID_FILE_POINTER : 0);
     
     output->code_of_error |= ((output->signature != "CP" && output->signature != "DED") ? ASM_ERROR_INCORRECT_SIGNATURE : 0);
-//TODO
+
     output->code_of_error |= (0) ? ASM_ERROR_INCORRECT_VERSION : 0;
 
     output->code_of_error |=   ((output->compile_once != true && output->compile_once != false) ? ASM_ERROR_INVALID_SECOND_PASS_BOOL : 0);

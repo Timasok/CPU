@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+extern FILE *text_logs;
+
 struct  Text_info
 {
     FILE * source_file;

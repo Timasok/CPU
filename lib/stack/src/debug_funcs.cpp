@@ -5,16 +5,10 @@
 #include <errno.h>
 #include <stdio.h>
 
-#include "../include/debug_funcs.h"
+#include "debug_funcs.h"
 
 #define LOCATION(reason) fprintf(stderr, "%s: file: %s func: %s line: %d\n", reason, \
                                  __FILE__, __FUNCTION__, __LINE__)
-
-#define ASSERT_STK(stkPtr)                                     \
-   do{                                                        \
-      if (returnStackError(stkPtr))                           \
-         stackDump(stkPtr, __FILE__, __FUNCTION__, __LINE__); \
-   } while (0)
 
 void hardAssert(bool condition)//works the wrong way
 {
@@ -29,7 +23,7 @@ void hardAssert(bool condition)//works the wrong way
 // void verifyStack(Stack *stk, int mode)
 // {
    
-//    ASSERT_STK(stk);
+//    ASSERT_STK(stk, stderr);
    
 // }
 
@@ -63,16 +57,16 @@ const char *stackStrError(Stack *stk)
    char *result = (char *)calloc(100, sizeof(char));
 
    if (stk->code_of_error & STACK_ERROR_NULL)
-      strcat(result, "ERROR: Data pointer = NULL\n");
+      strcat(result, "Data pointer = NULL\n");
 
    if (stk->code_of_error & STACK_ERROR_SIZE_BELOW_ZERO)
-      strcat(result, "ERROR: Size < 0\n");
+      strcat(result, "Size < 0\n");
 
    if (stk->code_of_error & STACK_ERROR_CAPACITY_BELOW_ZERO)
-      strcat(result, "ERROR: Capacity < 0\n");
+      strcat(result, "Capacity < 0\n");
 
    if (stk->code_of_error & STACK_ERROR_OVERSIZED)
-      strcat(result, "ERROR: Size > capacity\n");
+      strcat(result, "Size > capacity\n");
 
    // if (stk->code_of_error & STACK_ERROR_LEFTBUF_CANARY_DIED)
    //    strcat(result, "ERROR: LEFT BUF CANARY IS DEAD\n");
@@ -99,39 +93,42 @@ const char *stackStrError(Stack *stk)
 }
 
 //todo printElementType
-static void printElement(Stack *stk, int index)
+static void printElement(Stack *stk, int index, FILE *output)
 {
-   fprintf(stderr, "\t*[%d] = %d\n", index, *(stk->data + index)); 
+   fprintf(output, "\t*[%d] = %d\n", index, stk->data[index]); 
 
 }
 
-void printStack(Stack *stk)
+void printStack(Stack *stk, FILE *output)
 {
-   fprintf(stderr, "{\n");
-   fprintf(stderr, "size = %ld\n", stk->size);
-   fprintf(stderr, "capacity = %ld\n", stk->capacity);
-   fprintf(stderr, "data[%p]\n" , stk->data); 
-   fprintf(stderr, "code_of_error = %d\n", stk->code_of_error);
-   fprintf(stderr, "{\n\t{\n");
+   assert(output != NULL);
+   
+   fprintf(output, "{\n");
+   fprintf(output, "size = %ld\n", stk->size);
+   fprintf(output, "capacity = %ld\n", stk->capacity);
+   fprintf(output, "data[%p]\n" , stk->data); 
+   fprintf(output, "code_of_error = %d\n", stk->code_of_error);
+   fprintf(output, "{\n\t{\n");
 
    int counter = stk->capacity;
    while(--counter >= 0)
    {
       if(counter == stk->size - 1)
-         fputs(POISON_BORDER, stderr);
+         fputs(POISON_BORDER, output);
 
-      printElement(stk, counter);
+      printElement(stk, counter, output);
 
    }
 
-   fprintf(stderr, "\t}\n}\n");
+   fprintf(output, "\t}\n}\n");
    
 }
 
-void printVarInfo(Stack *stk)
+void printVarInfo(Stack *stk, FILE *output)
 {
-   ASSERT_STK(stk);
-   fprintf(stderr, "Stack[%p] "
+   assert(output != NULL);
+
+   fprintf(output, "Stack[%p] "
                      "%s"
                      " at %s at %s(%d)\n",
            stk,
@@ -140,17 +137,18 @@ void printVarInfo(Stack *stk)
 
 }
 
-void stackDump(Stack *stk, const char *name_of_file, const char *name_of_func,
+void stackDump(Stack *stk, FILE *output, const char *name_of_file, const char *name_of_func,
                       int number_of_line)
 {
+   assert(output != NULL);
 
-   fprintf(stderr, "%s at %s(%d)\n", name_of_func, name_of_file, number_of_line);
+   PRINT_ERR("%s at %s(%d)\n", name_of_func, name_of_file, number_of_line);
 
-   fprintf(stderr, "\e[0;31m%s\e[0m", stackStrError(stk));
+   PRINT_ERR("%s", stackStrError(stk));
 
-   printVarInfo(stk);
+   printVarInfo(stk, output);
 
-   printStack(stk);
+   printStack(stk, output);
 
 }
 

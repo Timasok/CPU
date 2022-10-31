@@ -1,9 +1,9 @@
 adr 	cmd   arg 	source
-0000	01	  a1	push [12]
-0002	02	  42	pop rdx
-0004	03  		add
-0005	04  		sub
-0006	01	  21	push 18
-0008	06  		div
-0009	07  		out
-000a	00  		hlt
+0000	01	  02	push 2
+0002	01	  05	push 5
+0004	01	  01	push 1
+0006	0d	  0a	jbe :push_next
+0008	01	  e4	push 228
+000a	lb	  0a	push_next:
+000b	07  		out 
+000c	00  		hlt

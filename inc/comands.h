@@ -8,12 +8,12 @@ if (strchr(arg_string, '[') != nullptr && strchr(arg_string, ']') != nullptr)
         *strchr(arg_string, ']') = '\0';
     }
 
-    fprintf(stderr, "%s\n", arg_string);
-    fprintf(stderr, "%d\n", atoi(arg_string));
+    fprintf(output->asm_log, "%s\n", arg_string);
+    fprintf(output->asm_log, "%d\n", atoi(arg_string));
 
     if(sscanf(arg_string, " %d", &argument) == 1)
     {
-        pushDmp(argument, isRegister, isMemory);
+        pushDmp(output->asm_log, argument, isRegister, isMemory);
         output->code[output->ip - 1] |= IMMED_MASK;
         output->code[output->ip++] = argument;
         break;
@@ -24,47 +24,20 @@ if (strchr(arg_string, '[') != nullptr && strchr(arg_string, ']') != nullptr)
         char * reg_var;
         //CRINGE
         sscanf(arg_string, "%ms", &reg_var);
-        fprintf(stderr, "%s\n", reg_var);
+        fprintf(output->asm_log, "%s\n", reg_var);
         GET_REG;
 
-        pushDmp(argument, isRegister, isMemory);
+        pushDmp(output->asm_log, argument, isRegister, isMemory);
         output->code[output->ip - 1] |= REG_MASK;
         output->code[output->ip++] = argument;
         break;
     }
 
-    fprintf(stderr, "GET HIGH POPING");
+    fprintf(output->asm_log, "GET HIGH POPING");
 } 
 ,
 { 
-    if (num_of_comand & IMMED_MASK)
-    {   
-        tmp_arg = cpu->code[cpu->ip++];     
-        
-    }
-    else if(num_of_comand & REG_MASK)
-    {
-        int reg_idx = cpu->code[cpu->ip++];
-        tmp_arg = cpu->Reg[reg_idx];
-
-    }else {
-
-        fprintf(stderr, "Error: WRONG PUSH MASK: -line: %d file: %s func: %s\n",  __LINE__, __FILE__, __FUNCTION__);
-
-        cpu->code_of_error |= CPU_ERROR_INCORRECT_PUSH_MASK;
-        return CPU_ERROR_INCORRECT_PUSH_MASK;
-    }
-
-    if(num_of_comand & MEM_MASK)
-    {
-        operateWithRam(cpu, tmp_arg, argPtr);
-
-    }else{
-
-        *argPtr = tmp_arg;
-
-    }
-
+    
 })
 
 DEF_CMD(POP, 2, 1 ,
@@ -77,12 +50,12 @@ if (strchr(arg_string, '[') != nullptr && strchr(arg_string, ']') != nullptr)
         *strchr(arg_string, ']') = '\0';
     }
 
-    fprintf(stderr, "%s\n", arg_string);
-    fprintf(stderr, "%d\n", atoi(arg_string));
+    fprintf(output->asm_log, "%s\n", arg_string);
+    fprintf(output->asm_log, "%d\n", atoi(arg_string));
 
     if(sscanf(arg_string, " %d", &argument) == 1)
     {
-        pushDmp(argument, isRegister, isMemory);
+        pushDmp(output->asm_log, argument, isRegister, isMemory);
         output->code[output->ip - 1] |= IMMED_MASK;
         output->code[output->ip++] = argument;
         break;
@@ -93,56 +66,19 @@ if (strchr(arg_string, '[') != nullptr && strchr(arg_string, ']') != nullptr)
         char * reg_var;
         //CRINGE
         sscanf(arg_string, "%ms", &reg_var);
-        fprintf(stderr, "%s\n", reg_var);
+        fprintf(output->asm_log, "%s\n", reg_var);
         GET_REG;
 
-        pushDmp(argument, isRegister, isMemory);
+        pushDmp(output->asm_log, argument, isRegister, isMemory);
         output->code[output->ip - 1] |= REG_MASK;
         output->code[output->ip++] = argument;
         break;
     }
    
-    fprintf(stderr, "GET HIGH PUSHING");
+    fprintf(output->asm_log, "GET HIGH PUSHING");
 }
 , 
 { 
-
-    if(num_of_comand & REG_MASK)
-    {
-        int reg_idx = cpu->code[cpu->ip++];
-        tmp_arg = cpu->Reg[reg_idx];
-
-    }else if (num_of_comand & IMMED_MASK)
-    {   
-        tmp_arg = cpu->code[cpu->ip++];
-        detectedPopToImmed = true;
-        
-    }else {
-
-        fprintf(stderr, "Error: WRONG POP MASK: -line: %d file: %s func: %s\n",  __LINE__, __FILE__, __FUNCTION__);
-
-        cpu->code_of_error |= CPU_ERROR_INCORRECT_POP_MASK;
-        return CPU_ERROR_INCORRECT_POP_MASK;
-    }
-
-
-    if(num_of_comand & MEM_MASK)
-    {
-        detectedPopToImmed = false;
-        operateWithRam(cpu, tmp_arg, argPtr);
-
-    }else{
-
-        *argPtr = tmp_arg;
-
-    }
-
-    if (detectedPopToImmed == true)
-    {
-        fprintf(stderr, "Error: CANNOT POP into IMMED  -line: %d file: %s func: %s\n",  __LINE__, __FILE__, __FUNCTION__);
-        cpu->code_of_error |= CPU_ERROR_ATTEMPT_TO_POP_INTO_IMMED;
-
-    }
 
 })
 
@@ -181,8 +117,9 @@ DEF_CMD (DIV, 6, 0 , {},
 
 DEF_CMD(OUT, 7, 0 , {}, 
 {
-    SINGLE_POP(cpu, &out);
-    OUT(cpu, &out);
+    elem_t tmp;
+    SINGLE_POP(cpu, &tmp);
+    OUT(cpu, tmp);
 
 })
 
@@ -195,21 +132,21 @@ DEF_CMD(DUP, 8, 0 ,  {},
 
 })
 
-DEF_CMD(IN, 9, 0,  {}, { })
-
-DEF_CMD(DMP, 10 , 0,  {}, { })
-
-DEF_CMD(JMP, 11 , 1, 
+DEF_CMD(RET, 9 , 0,  {}, 
 {
-    
+    RET(cpu);
+})
+
+DEF_CMD(CALL, 10 , 1,  
+{
     if (strchr(arg_string, ':') != nullptr)
     {
         output->compile_once *= 0;
-        DBG;
-        printf("%s\n", arg_string);
+         
+          
         // assert((strchr(arg_string, ':') + 1) != NULL);
         sscanf(strchr(arg_string, ':'), " :%s", label_name);        
-        DBG;
+         
         getFromLabels(output, arg_string, &argument);
         //free(label_name);
     }
@@ -221,7 +158,32 @@ DEF_CMD(JMP, 11 , 1,
     output->code[output->ip++] = argument;
 
 }, 
+{ 
+    CALL(cpu);
+})
 
+DEF_CMD(JMP, 11 , 1, 
+{
+    
+    if (strchr(arg_string, ':') != nullptr)
+    {
+        output->compile_once *= 0;
+         
+
+        sscanf(strchr(arg_string, ':'), " :%s", label_name);        
+
+        getFromLabels(output, arg_string, &argument);
+ 
+    }
+    else
+    {
+        sscanf(arg_string, " %d", &argument);
+    }
+
+    output->code[output->ip++] = argument;
+
+
+}, 
 {
     JUMP(cpu);
 })
@@ -231,11 +193,11 @@ DEF_CMD(JB, 12, 1,
     if (strchr(arg_string, ':') != nullptr)
     {
         output->compile_once *= 0;
-        DBG;
-        printf("%s\n", arg_string);
+         
+          
         // assert((strchr(arg_string, ':') + 1) != NULL);
         sscanf(strchr(arg_string, ':'), " :%s", label_name);        
-        DBG;
+         
         getFromLabels(output, arg_string, &argument);
         //free(label_name);
     }
@@ -258,11 +220,11 @@ DEF_CMD(JBE, 13 , 1,
     if (strchr(arg_string, ':') != nullptr)
     {
         output->compile_once *= 0;
-        DBG;
-        printf("%s\n", arg_string);
+         
+          
         // assert((strchr(arg_string, ':') + 1) != NULL);
         sscanf(strchr(arg_string, ':'), " :%s", label_name);        
-        DBG;
+         
         getFromLabels(output, arg_string, &argument);
         //free(label_name);
     }
@@ -284,11 +246,11 @@ DEF_CMD(JA, 14, 1,
     if (strchr(arg_string, ':') != nullptr)
     {
         output->compile_once *= 0;
-        DBG;
-        printf("%s\n", arg_string);
+         
+          
         // assert((strchr(arg_string, ':') + 1) != NULL);
         sscanf(strchr(arg_string, ':'), " :%s", label_name);        
-        DBG;
+         
         getFromLabels(output, arg_string, &argument);
         //free(label_name);
     }
@@ -310,11 +272,11 @@ DEF_CMD(JAE, 15 , 1,
     if (strchr(arg_string, ':') != nullptr)
     {
         output->compile_once *= 0;
-        DBG;
-        printf("%s\n", arg_string);
+         
+          
         // assert((strchr(arg_string, ':') + 1) != NULL);
         sscanf(strchr(arg_string, ':'), " :%s", label_name);        
-        DBG;
+         
         getFromLabels(output, arg_string, &argument);
         //free(label_name);
     }
@@ -336,11 +298,11 @@ DEF_CMD(JE, 16, 1,
     if (strchr(arg_string, ':') != nullptr)
     {
         output->compile_once *= 0;
-        DBG;
-        printf("%s\n", arg_string);
+         
+          
         // assert((strchr(arg_string, ':') + 1) != NULL);
         sscanf(strchr(arg_string, ':'), " :%s", label_name);        
-        DBG;
+         
         getFromLabels(output, arg_string, &argument);
         //free(label_name);
     }
@@ -362,11 +324,11 @@ DEF_CMD(JNE, 17 , 1,
     if (strchr(arg_string, ':') != nullptr)
     {
         output->compile_once *= 0;
-        DBG;
-        printf("%s\n", arg_string);
+         
+          
         // assert((strchr(arg_string, ':') + 1) != NULL);
         sscanf(strchr(arg_string, ':'), " :%s", label_name);        
-        DBG;
+         
         getFromLabels(output, arg_string, &argument);
         //free(label_name);
     }
@@ -383,7 +345,26 @@ DEF_CMD(JNE, 17 , 1,
     COND_JUMP(cpu, !=);
 })
 
-DEF_CMD(SHOW, 18, 0, {}, { })
+DEF_CMD(IN, 18, 0,  {}, 
+{ 
+    printf("\e[0;32mENTER VALUE: \e[0m");
+    elem_t tmp;
+    scanf("%d", &tmp);
+    SINGLE_PUSH(cpu, tmp);
+})
+
+DEF_CMD(SHOW, 19, 0, {}, 
+{
+    
+    for (int counter = 0; (cpu->RAM[counter] != 0) && (counter < RAM_CAPACITY); counter++)
+    {
+        printf("\e[0;33m%c\e[0m", cpu->RAM[counter]);
+        
+    }
+
+})
+
+DEF_CMD(DMP, 20 , 0,  {}, { })
 
 DEF_CMD(HLT, 0, 0, {}, 
 {

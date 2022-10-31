@@ -4,9 +4,6 @@
 #include "funcs_ASM.h"
 #include <stdlib.h>
 
-#define DBG fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n",            \
-                                                __LINE__, __FILE__, __FUNCTION__)
-
 enum ASM_ERRORS
 {
     ASM_ERROR_INVALID_FILE_POINTER          = 1 << 0,
@@ -25,9 +22,13 @@ enum ASM_ERRORS
 };
 
 int returnAsmError(Asm_info *output);
-int strAsmError(int code_of_error);
+int strAsmError(FILE *asm_log, int code_of_error);
+
+int pushDmp(FILE *asm_log, const int argument, const bool isRegister, const bool isMemory);
 int dumpAsm(Asm_info *output, const char *name_of_file, const char *name_of_func, int number_of_line);
-int dumpCmd(int number_of_line, char * cmd, int argument, bool hasArg);
-int pushDmp(int argument, bool isRegister, bool isMemory);
+int dumpCmd(FILE *asm_log, const int number_of_line, const char * cmd, const int argument, const bool hasArg);
+
+int openAsmLogs();
+int closeAsmLogs();
 
 #endif

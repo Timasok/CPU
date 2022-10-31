@@ -6,16 +6,30 @@
 
 const char* TXT_BORDER = "************************************************************";
 
-
-#define ASSERT_OK(textPtr)                                              \
-   do{                                                                  \
-      if (returnTextError(textPtr) != 0)                                \
-       {  fprintf(stderr, "DUMP_CALLED: file: %s func: %s line: %d\n",  \ 
-                                 __FILE__, __FUNCTION__, __LINE__);     \
-           printText(textPtr);                                          \
-       }                                                                \
+#define ASSERT_OK(textPtr)                                                  \
+   do{                                                                      \
+      if (returnTextError(textPtr) != 0)                                    \
+       {  /*fprintf(stderr, "DUMP_CALLED: file: %s func: %s line: %d\n",*/  \ 
+                            /*  __FILE__, __FUNCTION__, __LINE__); */       \
+           printText(textPtr);                                              \
+       }                                                                    \
    } while (0)
 
+#define PRINT_LOG(...)                                                  \
+        do {                                                            \
+            fprintf(text_logs, __VA_ARGS__);                            \
+        } while(0)   
+
+int openLogs()
+{
+    text_logs = fopen("text_log.txt", "w+");
+    return 0;
+}
+
+int closeLogs()
+{
+    fclose(text_logs);
+}
 
 int textCtor(Text_info * text, const char * file_name)
 {
@@ -66,7 +80,6 @@ int textCtor(Text_info * text, const char * file_name)
     
     //ASSERT_OK(text);
 
-    //TODO EXTRACT DELETE COMMENTS
     for (int line = 1; line < text->number_of_lines; line++)
     {
         int tmp_buf_idx = buf_idx;
@@ -89,16 +102,16 @@ int textCtor(Text_info * text, const char * file_name)
 
 int printText(Text_info * text)
 {
-    fprintf(stderr, "\n%s\n", TXT_BORDER);
-    fprintf(stderr, "  code_of_error = %d\n", text->code_of_error);
-    fprintf(stderr, "  buf_length = %ld\n  number_of_lines = %d\n  buf: \n%s\n", text->buf_length, text->number_of_lines, text->buf);
+    PRINT_LOG("\n%s\n", TXT_BORDER);
+    PRINT_LOG("  code_of_error = %d\n", text->code_of_error);
+    PRINT_LOG("  buf_length = %ld\n  number_of_lines = %d\n  buf: \n%s\n", text->buf_length, text->number_of_lines, text->buf);
 
     if (text->number_of_lines != 0)
-        fprintf(stderr, "\tLines: \n");
+        PRINT_LOG("\tLines: \n");
     for (int counter = 0; counter < text->number_of_lines; counter++)
-        printf("%s\n", text->lines[counter]);
+        PRINT_LOG("%s\n", text->lines[counter]);
 
-    fprintf(stderr, "\n%s\n", TXT_BORDER);
+    PRINT_LOG("\n%s\n", TXT_BORDER);
 
     return 0;
 }

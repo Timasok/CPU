@@ -3,13 +3,12 @@
 #include <assert.h>
 #include <math.h>
 #include <errno.h>
-#include <stdio.h>
+#include <string.h>
 #include <sys/stat.h>
+#include <string>
 
 // #include "funcs_CPU.h"
 #include "debug_CPU.h"
-
-#define DEBUG_MODE
 
 #ifdef DEBUG_MODE
 #define DBG_OUT fprintf(stderr, "Compiled nicely -line: %d file: %s func: %s\n",            \
@@ -22,7 +21,14 @@
 int main(int argc, const char* argv[])
 {
     
-    FILE * asm_source = fopen("a.code", "rb");
+    char * asm_name = "a.code";
+
+    if (argc == 2)
+    {
+        asm_name = strdup(argv[1]);
+    }
+
+    FILE * asm_source = fopen(asm_name, "rb");
 
     CPU_info cpu;
     CPU_Ctor(&cpu, asm_source);
@@ -32,9 +38,9 @@ int main(int argc, const char* argv[])
     process(&cpu);
     // printStack(&cpu->stack);
 
-    fcloseall();
-    CPU_Dtor(&cpu);
     
+    CPU_Dtor(&cpu);
+    fcloseall();
 
     return EXIT_SUCCESS;
 }

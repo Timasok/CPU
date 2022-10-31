@@ -1,0 +1,168 @@
+asmCtor at ASM/src/inout_ASM.cpp(25)
+CODE OF ERROR: 1057
+asmCtor at ASM/src/inout_ASM.cpp(41)
+CODE OF ERROR: 1057
+compile at ASM/src/funcs_ASM.cpp(48)
+CODE OF ERROR: 1057
+COMAND - push COMAND_LENGTH - 4 ARG - 2
+getArgs at ASM/src/funcs_ASM.cpp(172)
+CODE OF ERROR: 1057
+2
+2
+ARGUMENT: 2 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(188)
+CODE OF ERROR: 1057
+line - 0 comand - push argument - 1
+COMAND - push COMAND_LENGTH - 4 ARG - 5
+getArgs at ASM/src/funcs_ASM.cpp(172)
+CODE OF ERROR: 1057
+5
+5
+ARGUMENT: 5 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(188)
+CODE OF ERROR: 1057
+line - 1 comand - push argument - 1
+COMAND - push COMAND_LENGTH - 4 ARG - 1
+getArgs at ASM/src/funcs_ASM.cpp(172)
+CODE OF ERROR: 1057
+1
+1
+ARGUMENT: 1 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(188)
+CODE OF ERROR: 1057
+line - 2 comand - push argument - 1
+COMAND - jbe COMAND_LENGTH - 3 ARG - :push_next
+getArgs at ASM/src/funcs_ASM.cpp(172)
+CODE OF ERROR: 1057
+getFromLabels at ASM/src/funcs_ASM.cpp(104)
+CODE OF ERROR: 1057
+getFromLabels at ASM/src/funcs_ASM.cpp(117)
+CODE OF ERROR: 1057
+getArgs at ASM/src/funcs_ASM.cpp(188)
+CODE OF ERROR: 1065
+line - 3 comand - jbe argument - 1
+COMAND - push COMAND_LENGTH - 4 ARG - 228
+getArgs at ASM/src/funcs_ASM.cpp(172)
+CODE OF ERROR: 1065
+228
+228
+ARGUMENT: 228 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(188)
+CODE OF ERROR: 1065
+line - 5 comand - push argument - 1
+COMAND - push_next: COMAND_LENGTH - 10 ARG - (null)
+command_len == 10
+writeLabelInFile at ASM/src/funcs_ASM.cpp(126)
+CODE OF ERROR: 1065
+line - 7 comand - push_next argument - 0
+writeLabelInFile at ASM/src/funcs_ASM.cpp(158)
+CODE OF ERROR: 1065
+COMAND - out COMAND_LENGTH - 3 ARG - (null)
+line - 9 comand - out
+COMAND - hlt COMAND_LENGTH - 3 ARG - (null)
+line - 10 comand - hlt
+	Label[0] = {10, push_next}
+	Label[1] = {-1, imp}
+	Label[2] = {-1, imp}
+	Label[3] = {-1, imp}
+	Label[4] = {-1, imp}
+	Label[5] = {-1, imp}
+	Label[6] = {-1, imp}
+	Label[7] = {-1, imp}
+	Label[8] = {-1, imp}
+	Label[9] = {-1, imp}
+	Label[10] = {-1, imp}
+	Label[11] = {-1, imp}
+	Label[12] = {-1, imp}
+	Label[13] = {-1, imp}
+	Label[14] = {-1, imp}
+	Label[15] = {-1, imp}
+	Label[16] = {-1, imp}
+	Label[17] = {-1, imp}
+	Label[18] = {-1, imp}
+	Label[19] = {-1, imp}
+compile at ASM/src/funcs_ASM.cpp(93)
+CODE OF ERROR: 1065
+compile at ASM/src/funcs_ASM.cpp(48)
+CODE OF ERROR: 1577
+COMAND - push COMAND_LENGTH - 4 ARG - 2
+getArgs at ASM/src/funcs_ASM.cpp(172)
+CODE OF ERROR: 1577
+2
+2
+ARGUMENT: 2 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(188)
+CODE OF ERROR: 1577
+line - 0 comand - push argument - 1
+COMAND - push COMAND_LENGTH - 4 ARG - 5
+getArgs at ASM/src/funcs_ASM.cpp(172)
+CODE OF ERROR: 1577
+5
+5
+ARGUMENT: 5 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(188)
+CODE OF ERROR: 1577
+line - 1 comand - push argument - 1
+COMAND - push COMAND_LENGTH - 4 ARG - 1
+getArgs at ASM/src/funcs_ASM.cpp(172)
+CODE OF ERROR: 1577
+1
+1
+ARGUMENT: 1 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(188)
+CODE OF ERROR: 1577
+line - 2 comand - push argument - 1
+COMAND - jbe COMAND_LENGTH - 3 ARG - :push_next
+getArgs at ASM/src/funcs_ASM.cpp(172)
+CODE OF ERROR: 1577
+getFromLabels at ASM/src/funcs_ASM.cpp(104)
+CODE OF ERROR: 1577
+getArgs at ASM/src/funcs_ASM.cpp(188)
+CODE OF ERROR: 1577
+line - 3 comand - jbe argument - 1
+COMAND - push COMAND_LENGTH - 4 ARG - 228
+getArgs at ASM/src/funcs_ASM.cpp(172)
+CODE OF ERROR: 1577
+228
+228
+ARGUMENT: 228 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(188)
+CODE OF ERROR: 1577
+line - 5 comand - push argument - 1
+COMAND - push_next: COMAND_LENGTH - 10 ARG - (null)
+command_len == 10
+writeLabelInFile at ASM/src/funcs_ASM.cpp(126)
+CODE OF ERROR: 1577
+line - 7 comand - push_next argument - 0
+writeLabelInFile at ASM/src/funcs_ASM.cpp(158)
+CODE OF ERROR: 1577
+COMAND - out COMAND_LENGTH - 3 ARG - (null)
+line - 9 comand - out
+COMAND - hlt COMAND_LENGTH - 3 ARG - (null)
+line - 10 comand - hlt
+	Label[0] = {10, push_next}
+	Label[1] = {-1, imp}
+	Label[2] = {-1, imp}
+	Label[3] = {-1, imp}
+	Label[4] = {-1, imp}
+	Label[5] = {-1, imp}
+	Label[6] = {-1, imp}
+	Label[7] = {-1, imp}
+	Label[8] = {-1, imp}
+	Label[9] = {-1, imp}
+	Label[10] = {-1, imp}
+	Label[11] = {-1, imp}
+	Label[12] = {-1, imp}
+	Label[13] = {-1, imp}
+	Label[14] = {-1, imp}
+	Label[15] = {-1, imp}
+	Label[16] = {-1, imp}
+	Label[17] = {-1, imp}
+	Label[18] = {-1, imp}
+	Label[19] = {-1, imp}
+compile at ASM/src/funcs_ASM.cpp(93)
+CODE OF ERROR: 1577
+33	2	33	5	33	1	13	10	33	228	0	7	0	writeAssemblerInFile at ASM/src/inout_ASM.cpp(47)
+CODE OF ERROR: 1577
+asmDtor at ASM/src/inout_ASM.cpp(84)
+CODE OF ERROR: 1577

@@ -5,13 +5,20 @@
 #include <math.h>
 #include <errno.h>
 
-#include "../include/debug_funcs.h"
+#include "debug_funcs.h"
 
-#define ASSERT_STK(stkPtr)                                        \
-//    do{                                                        \
-//       if (returnStackError(stkPtr))                           \
-//          stackDump(stkPtr, __FILE__, __FUNCTION__, __LINE__); \
-//    } while (0)
+#define ASSERT_STK(stkPtr, output)                                      \
+   do{                                                                  \
+      if (returnStackError(stkPtr))                                     \
+         stackDump(stkPtr, output, __FILE__, __FUNCTION__, __LINE__);   \
+   } while (0)
+
+#define PRINT_ERR(...)                                                  \
+        do {                                                            \
+            fprintf(stderr,"\e[0;32mERROR: " );                         \
+            fprintf(stderr, __VA_ARGS__);                               \
+            fprintf(stderr,"\e[0m" );                                   \ 
+        } while(0)
 
 static void * getStackElement(Stack * stk, int index)
 {
@@ -20,7 +27,6 @@ static void * getStackElement(Stack * stk, int index)
 
 }
 
-//todo I don't use it yet
 static void setStackElement(Stack * stk, int index, elem_t element)
 {
     hardAssert(element != NULL);
@@ -40,7 +46,7 @@ static void fillWithPoison(Stack *stk, size_t size, size_t capacity)
 
 void stackResize(Stack * stk, size_t new_capacity)
 {
-    ASSERT_STK(stk);
+    //ASSERT_STK(stk, stderr);
 
     if (new_capacity <= stk->capacity)
         return ;
@@ -54,14 +60,14 @@ void stackResize(Stack * stk, size_t new_capacity)
 
     fillWithPoison(stk, stk->size, stk->capacity);
 
-    ASSERT_STK(stk);
+    //ASSERT_STK(stk, stderr);
      
 }
 
 void stack_Ctor(Stack *stk, size_t capacity, const char * name_of_var, 
                                         const char * name_of_file, const char * name_of_func, int number_of_line)
 {   
-    ASSERT_STK(stk);
+    //ASSERT_STK(stk, stderr);
 
     stk->var_info = {.name_of_var  = name_of_var, 
     .name_of_file = name_of_file, .name_of_func = name_of_func, .number_of_line  = number_of_line};
@@ -82,30 +88,30 @@ void stack_Ctor(Stack *stk, size_t capacity, const char * name_of_var,
 
     fillWithPoison(stk, stk->size, stk->capacity);
 
-    ASSERT_STK(stk);
+    //ASSERT_STK(stk, stderr);
 
 }
 
 void stackPush(Stack *stk, elem_t element)
 {
    
-    ASSERT_STK(stk);
+    //ASSERT_STK(stk, stderr);
 
     if (stk->size >= stk->capacity)
         stackResize(stk, stk->capacity * STACK_RESIZE_IF_PUSH); 
 
     // setStackElement(stk, stk->size, element);
 
-    fprintf(stderr, "%d\n", stk->size);
+    // fprintf(stderr, "%ld\n", stk->size);
     stk->data[stk->size++] = element;
 
-    ASSERT_STK(stk);
+    //ASSERT_STK(stk, stderr);
 
 }
 
 void stackDtor(Stack *stk)
 {
-    ASSERT_STK(stk);
+    //ASSERT_STK(stk, stderr);
 
     fillWithPoison(stk, stk->size, stk->capacity);
     free((void *)stk->data);
@@ -114,11 +120,11 @@ void stackDtor(Stack *stk)
 
 int stackPop(Stack *stk, elem_t * element) 
 {
-    ASSERT_STK(stk);
+    //ASSERT_STK(stk, stderr);
 
     if (stk->size == 0)
     {
-        fprintf(stderr,"You attained the end of stack\n");
+        PRINT_ERR("You attained the end of stack\n");
         stackDtor(stk);
         return EXIT_FAILURE;
     }
@@ -128,11 +134,11 @@ int stackPop(Stack *stk, elem_t * element)
 
     // *element = *(elem_t *)getStackElement(stk, stk->size-1);
     // setStackElement(stk,--stk->size, POISON);
-    fprintf(stderr, "%ld\n", stk->size);
+    // fprintf(stderr, "%ld\n", stk->size);
     *element = stk->data[stk->size-1];
     stk->data[--stk->size] = POISON;
 
-    ASSERT_STK(stk);
+    //ASSERT_STK(stk, stderr);
 
     return EXIT_SUCCESS;
 }

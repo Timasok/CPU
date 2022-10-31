@@ -3,6 +3,7 @@
 
 int main()
 {
-    system("./assembler");
-    system("./cpu");
+    system("./assembler source.txt b.code");
+    system("./cpu b.code");
+    return 1;
 }

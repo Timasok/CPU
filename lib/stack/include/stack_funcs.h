@@ -14,6 +14,6 @@ void stackPush(Stack *stk, elem_t element);
 int stackPop(Stack *stk, elem_t * element);
 void stackResize(Stack * stk, size_t new_capacity);
 
-void printStack(Stack *stk);
+void printStack(Stack *stk, FILE *output);
 
 #endif

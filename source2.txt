@@ -1,0 +1,17 @@
+call :main
+
+main:
+
+in
+
+for1:
+dup
+push 1
+sub
+dup
+push 1
+jbe :for1
+
+out
+
+hlt

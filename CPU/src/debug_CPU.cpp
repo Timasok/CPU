@@ -8,6 +8,7 @@
 
 #include "debug_CPU.h"
 
+
 int dump_CPU(CPU_info *cpu)
 {
     fprintf(cpu->log_file, "\nSIGNATURE: %s\n"
@@ -22,28 +23,27 @@ int dump_CPU(CPU_info *cpu)
 
 }
 
-//TODO Mark functions that change stack in defines
 int dump_CMD_CPU(int ip, int CMD, CPU_info *cpu, bool stackChanged)
 {
-    fprintf(stderr, "\nComand - ");
-    printBits(CMD);
-    fprintf(stderr, "\tip - %d\n", ip);
+    fprintf(cpu->log_file, "\nComand - ");
+    // printBits(CMD);
+    fprintf(cpu->log_file, "\tip - %d\n", ip);
     
     if (stackChanged)
     {
-        fprintf(stderr, "STACK CHANGED!\n");
-        printStack(&cpu->stack);
+        fprintf(cpu->log_file, "STACK CHANGED!\n");
+        printStack(&cpu->stack, cpu->log_file);
     }
     
 }
 
 int printBits(int x)
 {
-    do{
-        fprintf(stderr, "%d", x%2);
-        x /= 2;
+    // do{
+    //     printf("%d", x%2);
+    //     x /= 2;
 
-    }while(x);
+    // }while(x);
 
     return EXIT_SUCCESS;
 }

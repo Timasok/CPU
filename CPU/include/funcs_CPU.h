@@ -3,9 +3,10 @@
 
 #include "stack_funcs.h"
 
-const int MAX_STACK_SIZE = 1024;
-const int REG_CAPACITY   = 5;
-const int RAM_CAPACITY   = 4096;
+const int MAX_NUM_OF_FUNCS = 32;
+const int MAX_STACK_SIZE   = 1024;
+const int REG_CAPACITY     = 5;
+const int RAM_CAPACITY     = 4096;
 
 #define DEF_CMD(name, num, arg, ...) \
             CMD_##name = num,
@@ -26,7 +27,6 @@ struct CPU_info
     elem_t * code;
     elem_t Reg[REG_CAPACITY] = {};
     elem_t RAM[RAM_CAPACITY] = {};
-    //todo add sleep to underline it's slowness mthf
 
 };
 
@@ -46,7 +46,10 @@ enum MASKS
 #undef DEF_CMD
 bool checkSignature(CPU_info * cpu, FILE * asm_source);
 int CPU_Ctor(CPU_info * cpu, FILE * asm_source);
-int operateWithRam(CPU_info *cpu, elem_t tmp_arg, elem_t *arg);
+
+int pushToRam(CPU_info *cpu, elem_t tmp_arg);
+int popFromRam(CPU_info *cpu, elem_t tmp_arg);
+
 int operateArgs(CPU_info *cpu, elem_t *arg);
 int process(CPU_info * cpu);
 int CPU_Dtor(CPU_info * cpu);

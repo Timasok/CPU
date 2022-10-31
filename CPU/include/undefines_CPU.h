@@ -5,3 +5,4 @@
 #undef SECOND_POP
 #undef ARITHM
 #undef ARITHM_DBG
+#undef CALL

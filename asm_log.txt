@@ -2,33 +2,167 @@ asmCtor at ASM/src/inout_ASM.cpp(30)
 CODE OF ERROR: 1057
 asmCtor at ASM/src/inout_ASM.cpp(46)
 CODE OF ERROR: 1057
-compile at ASM/src/funcs_ASM.cpp(53)
+compile at ASM/src/funcs_ASM.cpp(52)
 CODE OF ERROR: 1057
-getArgs at ASM/src/funcs_ASM.cpp(182)
+getArgs at ASM/src/funcs_ASM.cpp(176)
 CODE OF ERROR: 1057
-ARGUMENT: 12 REGISTER: 0 MEMORY: 1
-getArgs at ASM/src/funcs_ASM.cpp(198)
+ARGUMENT: 10 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(192)
 CODE OF ERROR: 1057
 line - 0 comand - push argument - 1
-getArgs at ASM/src/funcs_ASM.cpp(182)
+getArgs at ASM/src/funcs_ASM.cpp(176)
 CODE OF ERROR: 1057
-ARGUMENT: 4 REGISTER: 1 MEMORY: 0
-ARGUMENT: 4 REGISTER: 1 MEMORY: 0
-getArgs at ASM/src/funcs_ASM.cpp(198)
+ARGUMENT: 33 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(192)
 CODE OF ERROR: 1057
-line - 1 comand - pop argument - 1
-line - 2 comand - add
-line - 3 comand - sub
-getArgs at ASM/src/funcs_ASM.cpp(182)
+line - 1 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
 CODE OF ERROR: 1057
-ARGUMENT: 18 REGISTER: 0 MEMORY: 0
-getArgs at ASM/src/funcs_ASM.cpp(198)
+ARGUMENT: 100 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 2 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 108 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 3 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 114 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(192)
 CODE OF ERROR: 1057
 line - 4 comand - push argument - 1
-line - 5 comand - div
-line - 6 comand - out
-line - 7 comand - hlt
-compile at ASM/src/funcs_ASM.cpp(98)
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 111 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 5 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 119 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 6 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 32 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 7 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 111 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 8 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 108 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 9 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 108 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 10 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 101 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 11 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 72 REGISTER: 0 MEMORY: 0
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 12 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 0 REGISTER: 0 MEMORY: 1
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 13 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 1 REGISTER: 0 MEMORY: 1
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 14 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 2 REGISTER: 0 MEMORY: 1
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 15 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 3 REGISTER: 0 MEMORY: 1
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 16 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 4 REGISTER: 0 MEMORY: 1
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 17 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 5 REGISTER: 0 MEMORY: 1
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 18 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 6 REGISTER: 0 MEMORY: 1
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 19 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 7 REGISTER: 0 MEMORY: 1
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 20 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 8 REGISTER: 0 MEMORY: 1
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 21 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 9 REGISTER: 0 MEMORY: 1
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 22 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 10 REGISTER: 0 MEMORY: 1
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 23 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 11 REGISTER: 0 MEMORY: 1
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 24 comand - push argument - 1
+getArgs at ASM/src/funcs_ASM.cpp(176)
+CODE OF ERROR: 1057
+ARGUMENT: 12 REGISTER: 0 MEMORY: 1
+getArgs at ASM/src/funcs_ASM.cpp(192)
+CODE OF ERROR: 1057
+line - 25 comand - push argument - 1
+line - 27 comand - show
+line - 28 comand - hlt
+compile at ASM/src/funcs_ASM.cpp(97)
 CODE OF ERROR: 1057
 writeAssemblerInFile at ASM/src/inout_ASM.cpp(52)
 CODE OF ERROR: 1057

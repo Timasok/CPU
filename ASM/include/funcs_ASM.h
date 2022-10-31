@@ -11,7 +11,6 @@ const int LABELS_SIZE  = 20;//actual size only of numbered labels
 const int LABEL_POISON = 0xFFFFFFFF;
 // const char * LABEL_NAME_POISON = "imp";
 
-//TODO ВЫДЕЛИТЬ ПАМЯТЬ ПОД УКАЗАТЕЛЬ НА ТЕКСТ МЕТКИ
 //TODO check memset in Ctor it might crash
 struct Label
 {
@@ -29,6 +28,7 @@ struct Asm_info
     int * code;
     bool compile_once = true;
     FILE * asm_file;
+    FILE * asm_log = fopen("asm_log_2.txt", "w");
     int code_of_error;
 
 };
@@ -91,6 +91,14 @@ enum MASKS
 int compile(Text_info *input, Asm_info *output);
 int getArgs(Asm_info *output, char * arg_string);
 int getFromLabels(Asm_info *output, int label_idx, int * argument);
+
+/// @brief Writes label in file 
+/// @param number_of_line 
+/// @param cmd 
+/// @param input 
+/// @param output 
+/// @param asm_listing 
+/// @return 
 int writeLabelInFile(int number_of_line, char *cmd, Text_info *input, Asm_info *output, FILE *asm_listing);
 
 #endif
